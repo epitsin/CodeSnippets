@@ -30,20 +30,5 @@
     "ts-jest": "^26.4.0",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.3"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "src"
-    ],
-    "restartable": "rs",
-    "ignore": [
-      "node_modules/**/node_modules"
-    ],
-    "env": {
-      "NODE_ENV": "development",
-      "PORT": 4000
-    },
-    "ext": "js,ts,json",
-    "exec": "ts-node  --transpile-only ./src/app.ts"
   }
 }
