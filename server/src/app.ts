@@ -1,24 +1,37 @@
-import express from 'express';
+import express from "express";
+import bodyParser from "body-parser";
 import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
-import { DataInitializer } from './dataInitializer'
-import snippetsRouter from './routes/snippetsRouter'
+import { DataInitializer } from './utils/dataInitializer';
+import { SnippetsRouter } from './routes/snippetsRouter';
+import { environment } from './config/environment/dev';
+import { Router } from "./routes/router";
 
-const app: express.Application = express();
+class App {
+  public app: express.Application;
+  public snippetsRouter: SnippetsRouter = new SnippetsRouter();
 
-mongoose.connect('mongodb://localhost/initialtest2', { useNewUrlParser: true });
-DataInitializer.populateInitialData();
+  constructor() {
+    this.app = express();
+    this.configureDatabase();
+    this.configureExpress();
+    //this.snippetsRouter.configureRoutes(this.app);
+  }
 
-const port = process.env.PORT || 3000;
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+  private async configureDatabase(): Promise<void> {
+    await mongoose.connect(environment.mongoURL, { useNewUrlParser: true });
 
-app.use('/api', snippetsRouter);
+    await DataInitializer.populateInitialData();
+  }
 
-app.get('/', (_req, res) => {
-  res.send('Welcome to my Nodemon API!');
-});
+  private configureExpress(): void {
+    // support application/json type post data
+    this.app.use(bodyParser.json());
+    //support application/x-www-form-urlencoded post data
+    this.app.use(bodyParser.urlencoded({ extended: false }));
 
-app.listen(port, () => {
-  console.log(`Running on port ${port}`);
-});
+    this.app.use(new Router().routes);
+  }
+
+}
+
+export default new App().app;

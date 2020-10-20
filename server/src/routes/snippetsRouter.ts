@@ -1,59 +1,22 @@
 import * as express from 'express';
-import SnippetSchema from '../models/snippet';
+import { SnippetController } from '../controllers/snippetController';
+import { SnippetRepository } from '../repositories/snippetRepository';
 
-const snippetsRouter = express.Router();
+export class SnippetsRouter {
+  private controller: SnippetController;
 
-snippetsRouter.route('/snippets')
-  .get(async (req, res) => {
-    SnippetSchema.find(req.query, (err, snippets) => {
-      if (err) {
-        return res.send(err);
-      }
-      return res.json(snippets);
-    });
-  })
-  .post(async (req, res) => {
-    const snippet = new SnippetSchema(req.body);
+  constructor() {
+    this.controller = new SnippetController(new SnippetRepository); // TODO: inject?
+  }
 
-    await snippet.save();
-    return res.status(201).json(snippet);
-  });
+  get routes(): express.Router {
+    const router = express.Router();
+    router.get("/snippets", this.controller.get.bind(this.controller));
+    router.post("/snippets", this.controller.post.bind(this.controller));
 
-snippetsRouter.use('/snippets/:id', (req, res, next) => {
-  SnippetSchema.findById(req.params.id, (err, snippet) => {
-    if (err) {
-      return res.send(err);
-    }
+    router.use('/snippets/:id', this.controller.validateSnippet.bind(this.controller)); 
+    router.get("/snippets/:id", this.controller.getById.bind(this.controller));
 
-    if (snippet) {
-      req.snippet = snippet;
-      return next();
-    }
-
-    return res.sendStatus(404);
-  });
-});
-
-snippetsRouter.route('/snippets/:id')
-  .get((req, res) => res.json(req.snippet))
-  .put((req, res) => {
-    const { snippet } = req;
-    snippet.name = req.body.name;
-    snippet.code = req.body.code;
-    snippet.save((err) => {
-      if (err) {
-        return res.send(err);
-      }
-      return res.json(snippet);
-    });
-  })
-  .delete((req, res) => {
-    req.snippet.remove((err) => {
-      if (err) {
-        return res.send(err);
-      }
-      return res.sendStatus(204);
-    });
-  });
-
-export default snippetsRouter;
+    return router;
+  }
+}

@@ -4,7 +4,7 @@ import { IUser } from './user';
 export interface ISnippet extends Document {
   name: string;
   code: string;
-  owner: IUser['_id'];
+  owner?: IUser['_id']; // TODO: make required
 }
 
 const SnippetSchema: Schema = new Schema({
