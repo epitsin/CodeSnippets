@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="firstName">First name</label>
+        <input type="text" formControlName="firstName" placeholder="Harry" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && this.registerForm.controls.firstName.errors }" />
+        <div *ngIf="submitted && this.registerForm.controls.firstName.errors" class="invalid-feedback">
+          <div *ngIf="this.registerForm.controls.firstName.errors.required">First name is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last name</label>
+        <input type="text" formControlName="lastName" placeholder="Potter" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && this.registerForm.controls.lastName.errors }" />
+        <div *ngIf="submitted && this.registerForm.controls.lastName.errors" class="invalid-feedback">
+          <div *ngIf="this.registerForm.controls.lastName.errors.required">Last name is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" formControlName="username" placeholder="hpotter" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && this.registerForm.controls.username.errors }" />
+        <div *ngIf="submitted && this.registerForm.controls.username.errors" class="invalid-feedback">
+          <div *ngIf="this.registerForm.controls.username.errors.required">Username is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" formControlName="password" placeholder="*****" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && this.registerForm.controls.password.errors }" />
+        <div *ngIf="submitted && this.registerForm.controls.password.errors" class="invalid-feedback">
+          <div *ngIf="this.registerForm.controls.password.errors.required">Password is required</div>
+        </div>
+      </div>
+      <button [disabled]="loading" class="btn btn-primary">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        Register
+      </button>
+      <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    </form>
+  </div>
+</div>

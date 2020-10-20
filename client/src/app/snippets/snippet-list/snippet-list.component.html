@@ -1,0 +1,6 @@
+<div class="card mt-4" *ngFor="let snippet of snippets">
+  <h4 class="card-header" [routerLink]="['snippets', snippet._id]">{{snippet.name}}</h4>
+  <div class="card-body">
+    {{snippet.code}}
+  </div>
+</div>
