@@ -1,6 +1,5 @@
-import app from "./app";
-import { environment } from './config/environment/dev';
+import app from './app';
 
-app.listen(environment.port, () => {
-  console.log('Server listening on port ' + environment.port);
+app.listen(process.env.PORT, () => {
+  console.log(`Server listening on port ${process.env.PORT}`);
 });

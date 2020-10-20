@@ -1,8 +1,8 @@
 import SnippetSchema from '../models/snippet';
 
-export class DataInitializer {
+class DataInitializer {
   public static async populateInitialData() {
-    const existingData = await SnippetSchema.find({});;
+    const existingData = await SnippetSchema.find({});
     if (existingData.length) {
       return;
     }
@@ -10,9 +10,11 @@ export class DataInitializer {
     // TODO: read from file
     const snippet = new SnippetSchema({
       name: 'test name',
-      code: 'test code'
+      code: 'test code',
     });
 
     await snippet.save();
   }
 }
+
+export default DataInitializer;

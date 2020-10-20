@@ -1,8 +1,10 @@
 import SnippetSchema, { ISnippet } from '../models/snippet';
-import { Repository } from './repository';
+import Repository from './repository';
 
-export class SnippetRepository extends Repository<ISnippet> {
+class SnippetRepository extends Repository<ISnippet> {
   constructor() {
     super(SnippetSchema);
   }
 }
+
+export default SnippetRepository;

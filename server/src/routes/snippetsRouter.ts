@@ -1,22 +1,25 @@
 import * as express from 'express';
-import { SnippetController } from '../controllers/snippetController';
-import { SnippetRepository } from '../repositories/snippetRepository';
+import AuthenticationController from '../controllers/authenticationController';
+import SnippetController from '../controllers/snippetController';
+import SnippetRepository from '../repositories/snippetRepository';
 
-export class SnippetsRouter {
-  private controller: SnippetController;
+class SnippetsRouter {
+  private snippetController: SnippetController;
 
   constructor() {
-    this.controller = new SnippetController(new SnippetRepository); // TODO: inject?
+    this.snippetController = new SnippetController(new SnippetRepository()); // TODO: inject?
   }
 
   get routes(): express.Router {
     const router = express.Router();
-    router.get("/snippets", this.controller.get.bind(this.controller));
-    router.post("/snippets", this.controller.post.bind(this.controller));
+    router.get('/', this.snippetController.get.bind(this.snippetController));
+    router.post('/', AuthenticationController.authenticateJWT, this.snippetController.post.bind(this.snippetController));
 
-    router.use('/snippets/:id', this.controller.validateSnippet.bind(this.controller)); 
-    router.get("/snippets/:id", this.controller.getById.bind(this.controller));
+    router.use('/:id', AuthenticationController.authenticateJWT, this.snippetController.validateSnippet.bind(this.snippetController));
+    router.get('/:id', AuthenticationController.authenticateJWT, this.snippetController.getById.bind(this.snippetController));
 
     return router;
   }
 }
+
+export default SnippetsRouter;
