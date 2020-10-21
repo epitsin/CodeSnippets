@@ -2,7 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 
 import UserRepository from '../repositories/userRepository';
-import UserSchema from '../models/user';
+import UserSchema, { IUserModel } from '../models/user';
 import Locals from '../providers/locals';
 
 class UserController {
@@ -42,26 +42,18 @@ class UserController {
         });
       }
 
-      return user.save((_err: Error) => {
+      return user.save((_err: Error, createdUser: IUserModel) => {
         if (_err) {
           return res.json({
             error: _err,
           });
         }
 
-        const token = jwt.sign(
-          { email, password },
-          Locals.config().appSecret,
-          { expiresIn: Locals.config().jwtExpiresIn * 60 },
-        );
-
-        // Hide protected columns
-        user.password = '';
+        const token = UserController.createJwtToken(createdUser);
 
         return res.json({
-          user,
           token,
-          token_expires_in: Locals.config().jwtExpiresIn * 60,
+          expiresIn: Locals.config().jwtExpiresIn * 60,
         });
       });
     });
@@ -92,10 +84,8 @@ class UserController {
           error: ['Please login using your social creds'],
         });
       }
-      debugger;
 
       return user.comparePassword(password, (_err: Error, isMatch: boolean) => {
-        debugger;
         if (_err) {
           return res.json({ error: _err });
         }
@@ -106,22 +96,27 @@ class UserController {
           });
         }
 
-        const token = jwt.sign(
-          { email, password },
-          Locals.config().appSecret,
-          { expiresIn: Locals.config().jwtExpiresIn * 60 },
-        );
-
-        // Hide protected columns
-        user.password = '';
+        const token = UserController.createJwtToken(user);
 
         return res.json({
-          user,
           token,
-          token_expires_in: Locals.config().jwtExpiresIn * 60,
+          expiresIn: Locals.config().jwtExpiresIn * 60,
         });
       });
     });
+  }
+
+  private static createJwtToken(user: IUserModel) {
+    return jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+      Locals.config().appSecret,
+      { expiresIn: Locals.config().jwtExpiresIn * 60 },
+    );
   }
 }
 

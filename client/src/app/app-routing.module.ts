@@ -4,11 +4,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './authentication/login/login.component';
 import { RegisterComponent } from './authentication/register/register.component';
 import { RouteGuard } from './core/guards/route.guard';
+import { AllSnippetsComponent } from './snippets/all-snippets/all-snippets.component';
+import { MySnippetsComponent } from './snippets/my-snippets/my-snippets.component';
 import { SnippetDetailsComponent } from './snippets/snippet-details/snippet-details.component';
-import { SnippetListComponent } from './snippets/snippet-list/snippet-list.component';
 
 const routes: Routes = [
-  { path: '', component: SnippetListComponent },//, canActivate: [AuthGuard] },
+  { path: '', component: AllSnippetsComponent },
+  { path: 'mine', component: MySnippetsComponent, canActivate: [RouteGuard] },
   { path: 'snippets/:id', component: SnippetDetailsComponent, canActivate: [RouteGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

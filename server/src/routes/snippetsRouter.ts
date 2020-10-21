@@ -12,10 +12,9 @@ class SnippetsRouter {
 
   get routes(): express.Router {
     const router = express.Router();
-    router.get('/', this.snippetController.get.bind(this.snippetController));
-    router.post('/', AuthenticationController.authenticateJWT, this.snippetController.post.bind(this.snippetController)); //, Passport.isAuthenticated
+    router.get('/', this.snippetController.getAll.bind(this.snippetController));
+    router.post('/', AuthenticationController.authenticateJWT, this.snippetController.post.bind(this.snippetController));
 
-    router.use('/:id', AuthenticationController.authenticateJWT, this.snippetController.validateSnippet.bind(this.snippetController));
     router.get('/:id', AuthenticationController.authenticateJWT, this.snippetController.getById.bind(this.snippetController));
 
     return router;

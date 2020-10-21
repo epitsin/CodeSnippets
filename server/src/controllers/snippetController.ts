@@ -9,42 +9,50 @@ class SnippetController {
     this.snippetRepository = snippetRepository;
   }
 
-  public async get(_req: express.Request, res: express.Response) {
-    const snippets = await this.snippetRepository.get().catch((err) => res.send(err));
+  public async getAll(req: express.Request, res: express.Response) {
+    // const { page, limit } = req.query;
+
+    // .paginate({ page, limit }).exec();
+    const query = { author: req.query.userId };
+    const snippets = await this.snippetRepository.get(query).catch((err) => res.send(err));
+    return res.json(snippets);
+  }
+
+  public async getMine(req: express.Request, res: express.Response) {
+    const snippets = await this.snippetRepository.get({ author: req.query.userId })
+      .catch((err) => res.send(err));
     return res.json(snippets);
   }
 
   // eslint-disable-next-line class-methods-use-this
   public async getById(req: express.Request, res: express.Response) {
-    return res.json(req.snippet);
-  }
-
-  public async validateSnippet(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ) {
-    let snippet;
     try {
-      snippet = await this.snippetRepository.getById(<string>req.params.id);
+      const snippet = await this.snippetRepository.getByIdWithTags(<string>req.params.id);
+      if (snippet) {
+        return res.json(snippet);
+      }
+
+      return res.sendStatus(404);
     } catch (err) {
       return res.send(err);
     }
-
-    if (snippet) {
-      req.snippet = snippet;
-      return next();
-    }
-
-    return res.sendStatus(404);
   }
 
   public async post(req: express.Request, res: express.Response) {
     const snippet = req.body as ISnippet;
-    const createdSnippet = await this.snippetRepository
-      .create(snippet)
-      .catch((err) => res.send(err));
-    return res.status(201).json(createdSnippet);
+    try {
+      const existingSnippet = await this.snippetRepository.getById(<string>req.params.id);
+      if (existingSnippet) {
+        const createdSnippet = await this.snippetRepository
+          .create(snippet)
+          .catch((err) => res.send(err));
+        return res.status(201).json(createdSnippet);
+      }
+
+      return res.sendStatus(404);
+    } catch (err) {
+      return res.send(err);
+    }
   }
 }
 

@@ -27,6 +27,9 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { CreateSnippetComponent } from './snippets/create-snippet/create-snippet.component';
+import { AllSnippetsComponent } from './snippets/all-snippets/all-snippets.component';
+import { MySnippetsComponent } from './snippets/my-snippets/my-snippets.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { MatListModule } from '@angular/material/list';
     RegisterComponent,
     SnippetListComponent,
     SnippetDetailsComponent,
-    NavigationComponent
+    NavigationComponent,
+    CreateSnippetComponent,
+    AllSnippetsComponent,
+    MySnippetsComponent
   ],
   imports: [
     BrowserModule,
