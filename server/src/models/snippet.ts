@@ -1,10 +1,10 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { IUser } from './user';
+import { IUserModel } from './user';
 
 export interface ISnippet extends Document {
   name: string;
   code: string;
-  owner?: IUser['_id']; // TODO: make required
+  owner?: IUserModel['_id']; // TODO: make required
 }
 
 const SnippetSchema: Schema = new Schema({

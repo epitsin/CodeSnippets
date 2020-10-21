@@ -1,11 +1,9 @@
-import * as express from 'express';
-import * as jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import passport from 'passport';
+import express from 'express';
+import jwt from 'jsonwebtoken';
 
-import config from '../config';
 import UserRepository from '../repositories/userRepository';
 import UserSchema from '../models/user';
+import Locals from '../providers/locals';
 
 class UserController {
   private userRepository: UserRepository;
@@ -20,40 +18,109 @@ class UserController {
   }
 
   public static async register(req: express.Request, res: express.Response) {
-    const hashedPassword = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+    const {
+      email, password, firstName, lastName,
+    } = req.body;
 
-    await UserSchema.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      username: req.body.username,
-      password: hashedPassword,
+    const user = new UserSchema({
+      email,
+      password,
+      firstName,
+      lastName,
     });
 
-    const token = jwt.sign(
-      { username: req.body.username, scope: req.body.scope },
-      config.jwtSecret,
-    );
-    res.status(200).send({ token });
+    UserSchema.findOne({ email }, (err, existingUser) => {
+      if (err) {
+        return res.json({
+          error: err,
+        });
+      }
+
+      if (existingUser) {
+        return res.json({
+          error: ['Account with the e-mail address already exists.'],
+        });
+      }
+
+      return user.save((_err: Error) => {
+        if (_err) {
+          return res.json({
+            error: _err,
+          });
+        }
+
+        const token = jwt.sign(
+          { email, password },
+          Locals.config().appSecret,
+          { expiresIn: Locals.config().jwtExpiresIn * 60 },
+        );
+
+        // Hide protected columns
+        user.password = '';
+
+        return res.json({
+          user,
+          token,
+          token_expires_in: Locals.config().jwtExpiresIn * 60,
+        });
+      });
+    });
   }
 
   public static login(
-    _req: express.Request,
+    req: express.Request,
     res: express.Response,
-    next: express.NextFunction,
   ) {
-    passport.authenticate('local', (err, user) => {
-      // no async/await because passport works only with callback ..
-      if (err) return next(err);
-      if (!user) {
-        return res.status(401);
+    const email = req.body.email.toLowerCase();
+    const { password } = req.body;
+
+    UserSchema.findOne({ email }, (err, user) => {
+      if (err) {
+        return res.status(401).json({
+          error: err,
+        });
       }
-      const token = jwt.sign({ username: user.username }, config.jwtSecret);
-      // algorithm: 'RS256',
-      //   expiresIn: 120,
-      //   subject: userId
-      // }
-      // res.cookie("SESSIONID", jwtBearerToken, { httpOnly: true, secure: true });
-      return res.status(200).send({ token });
+
+      if (!user) {
+        return res.status(401).json({
+          error: ['User not found!'],
+        });
+      }
+
+      if (!user.password) {
+        return res.status(401).json({
+          error: ['Please login using your social creds'],
+        });
+      }
+      debugger;
+
+      return user.comparePassword(password, (_err: Error, isMatch: boolean) => {
+        debugger;
+        if (_err) {
+          return res.json({ error: _err });
+        }
+
+        if (!isMatch) {
+          return res.json({
+            error: ['Password does not match!'],
+          });
+        }
+
+        const token = jwt.sign(
+          { email, password },
+          Locals.config().appSecret,
+          { expiresIn: Locals.config().jwtExpiresIn * 60 },
+        );
+
+        // Hide protected columns
+        user.password = '';
+
+        return res.json({
+          user,
+          token,
+          token_expires_in: Locals.config().jwtExpiresIn * 60,
+        });
+      });
     });
   }
 }

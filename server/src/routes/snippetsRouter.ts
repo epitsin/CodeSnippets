@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import AuthenticationController from '../controllers/authenticationController';
 import SnippetController from '../controllers/snippetController';
 import SnippetRepository from '../repositories/snippetRepository';
@@ -13,7 +13,7 @@ class SnippetsRouter {
   get routes(): express.Router {
     const router = express.Router();
     router.get('/', this.snippetController.get.bind(this.snippetController));
-    router.post('/', AuthenticationController.authenticateJWT, this.snippetController.post.bind(this.snippetController));
+    router.post('/', AuthenticationController.authenticateJWT, this.snippetController.post.bind(this.snippetController)); //, Passport.isAuthenticated
 
     router.use('/:id', AuthenticationController.authenticateJWT, this.snippetController.validateSnippet.bind(this.snippetController));
     router.get('/:id', AuthenticationController.authenticateJWT, this.snippetController.getById.bind(this.snippetController));
