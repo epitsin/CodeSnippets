@@ -1,1 +1,13 @@
-<p>snippet-details works!</p>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>{{this.snippet?.name}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <pre>
+      <code [innerHTML]="this.snippet?.code"></code>
+    </pre>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>LIKE</button>
+  </mat-card-actions>
+</mat-card>

@@ -10,16 +10,11 @@ import { SnippetService } from '../../core/services/snippet.service';
   styleUrls: ['./snippet-list.component.scss']
 })
 export class SnippetListComponent implements OnInit {
-  loading = false;
-  snippets: Snippet[];
+  public snippets: Snippet[];
 
   constructor(private snippetService: SnippetService) { }
 
-  ngOnInit() {
-    this.loading = true;
-    this.snippetService.getAll().pipe(first()).subscribe(snippets => {
-      this.loading = false;
-      this.snippets = snippets;
-    });
+  public async ngOnInit(): Promise<void> {
+    this.snippets = await this.snippetService.getAll();
   }
 }

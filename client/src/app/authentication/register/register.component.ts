@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,7 +33,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -51,7 +52,7 @@ export class RegisterComponent implements OnInit {
     }
 
     const user: User = {
-      username: this.registerForm.controls.username.value,
+      email: this.registerForm.controls.email.value,
       password: this.registerForm.controls.password.value,
       firstName: this.registerForm.controls.firstName.value,
       lastName: this.registerForm.controls.lastName.value,
