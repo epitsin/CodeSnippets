@@ -30,6 +30,7 @@
     ],
     "rules": {
         "no-useless-constructor": "off",
+        "no-param-reassign": 0,
         "linebreak-style": [
             "error",
             "windows"

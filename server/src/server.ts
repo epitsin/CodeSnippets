@@ -1,5 +1,16 @@
-import app from './app';
+import App from './providers/app';
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on port ${process.env.PORT}`);
-});
+/**
+ * Load Configuration
+ */
+App.loadConfiguration();
+
+/**
+ * Run the Database pool
+ */
+App.loadDatabase();
+
+/**
+ * Run the Server on Clusters
+ */
+App.loadServer();

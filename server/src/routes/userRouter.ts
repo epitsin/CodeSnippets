@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import UserController from '../controllers/userController';
 import UserRepository from '../repositories/userRepository';
 
