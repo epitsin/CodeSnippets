@@ -10,23 +10,23 @@ import Passport from '../providers/passport';
 class Http {
   public static mount(express: Application): Application {
     // Enables the request body parser
-    express.use(bodyParser.json({
+    express = express.use(bodyParser.json({
       limit: Locals.config().maxUploadLimit,
     }));
 
-    express.use(bodyParser.urlencoded({
+    express = express.use(bodyParser.urlencoded({
       limit: Locals.config().maxUploadLimit,
       parameterLimit: Locals.config().maxParameterLimit,
       extended: false,
     }));
 
-    express.use(cookieParser());
+    express = express.use(cookieParser());
 
     // Enables the request flash messages
-    express.use(flash());
+    express = express.use(flash());
 
     // Enables the "gzip" / "deflate" compression for response
-    express.use(compress());
+    express = express.use(compress());
 
     // Loads the passport configuration
     express = Passport.mountPackage(express);

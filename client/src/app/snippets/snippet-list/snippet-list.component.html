@@ -1,6 +1,12 @@
 <div class="card mt-4" *ngFor="let snippet of snippets">
-  <h4 class="card-header" [routerLink]="['snippets', snippet._id]">{{snippet.name}}</h4>
-  <div class="card-body">
-    {{snippet.code}}
-  </div>
+  <mat-card [routerLink]="['/snippets/', snippet._id]">
+    <mat-card-header>
+      <mat-card-title>{{snippet?.name}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <pre>
+        <code [innerHTML]="snippet?.code.substring(0, 50) + '...'"></code>
+      </pre>
+    </mat-card-content>
+  </mat-card>
 </div>

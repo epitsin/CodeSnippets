@@ -1,12 +1,12 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { ITag } from './tag';
-import { IUserModel } from './user';
+import { TagModel } from './tag';
+import { UserModel } from './user';
 
-export interface ISnippet extends Document {
+export interface SnippetModel extends Document {
   name: string;
   code: string;
-  author?: IUserModel['_id'];
-  tags: ITag[];
+  author?: UserModel['_id'];
+  tags: TagModel['_id'][];
 }
 
 const SnippetSchema: Schema = new Schema({
@@ -16,4 +16,4 @@ const SnippetSchema: Schema = new Schema({
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
 });
 
-export default mongoose.model<ISnippet>('Snippet', SnippetSchema);
+export default mongoose.model<SnippetModel>('Snippet', SnippetSchema);

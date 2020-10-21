@@ -9,7 +9,7 @@ class CORS {
       origin: Locals.config().url,
     };
 
-    express.use(cors(options));
+    express = express.use(cors(options));
 
     return express;
   }

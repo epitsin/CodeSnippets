@@ -7,11 +7,11 @@
         <mat-icon mat-list-icon>list</mat-icon>
         <h4 mat-line>All snippets</h4>
       </mat-list-item>
-      <mat-list-item routerLink="/mine" *ngIf="this.currentUser">
+      <mat-list-item routerLink="snippets/mine" *ngIf="this.currentUser">
         <mat-icon mat-list-icon>person</mat-icon>
         <h4 mat-line>My snippets</h4>
       </mat-list-item>
-      <mat-list-item routerLink="/" *ngIf="this.currentUser">
+      <mat-list-item routerLink="snippets/new" *ngIf="this.currentUser">
         <mat-icon mat-list-icon>fiber_new</mat-icon>
         <h4 mat-line>Create new</h4>
       </mat-list-item>

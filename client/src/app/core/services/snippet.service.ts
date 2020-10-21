@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Snippet } from '../models/snippet';
 import { AuthenticationService } from './authentication.service';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SnippetService {
@@ -15,10 +16,14 @@ export class SnippetService {
   }
 
   public getMine(): Promise<Snippet[]> {
-    return this.http.get<Snippet[]>(`${this.apiUrl}/snippets?userId=${this.authenticationService.currentUserValue.id}`).toPromise();
+    return this.http.get<Snippet[]>(`${this.apiUrl}/snippets?userId=${this.authenticationService.currentUserValue._id}`).toPromise();
   }
 
   public get(id: string): Promise<Snippet> {
     return this.http.get<Snippet>(`${this.apiUrl}/snippets/${id}`).toPromise();
+  }
+
+  public create(snippet: Snippet): Observable<Snippet> {
+    return this.http.post<Snippet>(`${this.apiUrl}/snippets`, snippet);
   }
 }

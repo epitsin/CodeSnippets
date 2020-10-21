@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { ISnippet } from './snippet';
+import { SnippetModel } from './snippet';
 
-export interface ITag extends Document {
+export interface TagModel extends Document {
   name: string;
-  snippets: ISnippet[]
+  snippets: SnippetModel['_id'][]
 }
 
 const TagSchema: Schema = new Schema({
@@ -11,4 +11,4 @@ const TagSchema: Schema = new Schema({
   snippets: [{ type: Schema.Types.ObjectId, ref: 'Snippet' }],
 });
 
-export default mongoose.model<ITag>('Tag', TagSchema);
+export default mongoose.model<TagModel>('Tag', TagSchema);

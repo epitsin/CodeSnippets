@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser';
 import express from 'express';
 
 import CORS from '../middlewares/cors';
@@ -16,6 +17,8 @@ class Express {
    */
   constructor() {
     this.express = express();
+
+    this.express.use(bodyParser.json()); // bug? why isn't it working from the separate file
 
     this.mountDotEnv();
     this.mountMiddlewares();

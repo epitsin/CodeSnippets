@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { ISnippet } from '../models/snippet';
+import { SnippetDto } from '../interfaces/dtos/snippetDto';
 import SnippetRepository from '../repositories/snippetRepository';
 
 class SnippetController {
@@ -39,17 +39,13 @@ class SnippetController {
   }
 
   public async post(req: express.Request, res: express.Response) {
-    const snippet = req.body as ISnippet;
+    debugger;
+    const snippet = req.body as SnippetDto;
+    snippet.author = req.authenticatedUser;
     try {
-      const existingSnippet = await this.snippetRepository.getById(<string>req.params.id);
-      if (existingSnippet) {
-        const createdSnippet = await this.snippetRepository
-          .create(snippet)
-          .catch((err) => res.send(err));
-        return res.status(201).json(createdSnippet);
-      }
+      const createdSnippet = await this.snippetRepository.create(snippet);
 
-      return res.sendStatus(404);
+      return res.status(201).json(createdSnippet);
     } catch (err) {
       return res.send(err);
     }

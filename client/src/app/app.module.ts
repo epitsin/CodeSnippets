@@ -3,6 +3,19 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LayoutModule } from '@angular/cdk/layout';
+
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,25 +24,13 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { AuthenticationService } from './core/services/authentication.service';
 import { RouteGuard } from './core/guards/route.guard';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavigationComponent } from './navigation/navigation.component';
 import { RegisterComponent } from './authentication/register/register.component';
 import { SnippetDetailsComponent } from './snippets/snippet-details/snippet-details.component';
-import { SnippetListComponent } from './snippets/snippet-list/snippet-list.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
-import { NavigationComponent } from './navigation/navigation.component';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
 import { CreateSnippetComponent } from './snippets/create-snippet/create-snippet.component';
 import { AllSnippetsComponent } from './snippets/all-snippets/all-snippets.component';
 import { MySnippetsComponent } from './snippets/my-snippets/my-snippets.component';
+import { SnippetListComponent } from './snippets/snippet-list/snippet-list.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { MySnippetsComponent } from './snippets/my-snippets/my-snippets.componen
     NavigationComponent,
     CreateSnippetComponent,
     AllSnippetsComponent,
-    MySnippetsComponent
+    MySnippetsComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +50,6 @@ import { MySnippetsComponent } from './snippets/my-snippets/my-snippets.componen
     CommonModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    NgbModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatCardModule,
@@ -59,7 +59,9 @@ import { MySnippetsComponent } from './snippets/my-snippets/my-snippets.componen
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatAutocompleteModule,
+    MatChipsModule
   ],
   providers: [
     AuthenticationService,

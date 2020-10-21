@@ -44,17 +44,22 @@ export class AuthenticationService {
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    this.handleJwtPayload(null);
   }
 
   private handleJwtPayload(payload: IJwtPayload) {
-    // store user details and jwt token in local storage to keep user logged in between page refreshes
-    const tokenInfo = this.decodeJwtPayload(payload.token);
-    const user: User = {
-      id: tokenInfo.id,
-      email: tokenInfo.email,
-      firstName: tokenInfo.firstName,
-      lastName: tokenInfo.lastName
+    let user: User = null;
+
+    if (payload && payload.token) {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      const tokenInfo = this.decodeJwtPayload(payload.token);
+      user = {
+        _id: tokenInfo._id,
+        email: tokenInfo.email,
+        firstName: tokenInfo.firstName,
+        lastName: tokenInfo.lastName,
+        token: payload.token
+      }
     }
 
     if (this.currentUserSubject) {

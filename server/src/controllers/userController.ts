@@ -2,7 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 
 import UserRepository from '../repositories/userRepository';
-import UserSchema, { IUserModel } from '../models/user';
+import UserSchema, { UserModel } from '../models/user';
 import Locals from '../providers/locals';
 
 class UserController {
@@ -42,7 +42,7 @@ class UserController {
         });
       }
 
-      return user.save((_err: Error, createdUser: IUserModel) => {
+      return user.save((_err: Error, createdUser: UserModel) => {
         if (_err) {
           return res.json({
             error: _err,
@@ -106,10 +106,10 @@ class UserController {
     });
   }
 
-  private static createJwtToken(user: IUserModel) {
+  private static createJwtToken(user: UserModel) {
     return jwt.sign(
       {
-        id: user._id,
+        _id: user._id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,

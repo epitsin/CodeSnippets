@@ -14,8 +14,6 @@ import { AuthenticationService } from '../../core/services/authentication.servic
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
-  loading = false;
-  submitted = false;
   returnUrl: string;
   error = '';
 
@@ -44,8 +42,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.registerForm.invalid) {
       return;
@@ -57,7 +53,6 @@ export class RegisterComponent implements OnInit {
       firstName: this.registerForm.controls.firstName.value,
       lastName: this.registerForm.controls.lastName.value,
     };
-    this.loading = true;
     this.authenticationService.register(user)
       .pipe(first())
       .subscribe(
@@ -66,7 +61,6 @@ export class RegisterComponent implements OnInit {
         },
         error => {
           this.error = error;
-          this.loading = false;
         });
   }
 }

@@ -2,12 +2,13 @@ import express from 'express';
 import AuthenticationController from '../controllers/authenticationController';
 import SnippetController from '../controllers/snippetController';
 import SnippetRepository from '../repositories/snippetRepository';
+import TagRepository from '../repositories/tagRepository';
 
 class SnippetsRouter {
   private snippetController: SnippetController;
 
   constructor() {
-    this.snippetController = new SnippetController(new SnippetRepository()); // TODO: inject?
+    this.snippetController = new SnippetController(new SnippetRepository(new TagRepository()));
   }
 
   get routes(): express.Router {

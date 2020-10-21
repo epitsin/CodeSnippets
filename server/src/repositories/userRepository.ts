@@ -1,7 +1,7 @@
-import UserSchema, { IUserModel } from '../models/user';
+import UserSchema, { UserModel } from '../models/user';
 import Repository from './repository';
 
-class UserRepository extends Repository<IUserModel> { // IUser?
+class UserRepository extends Repository<UserModel> { // IUser?
   constructor() {
     super(UserSchema);
   }

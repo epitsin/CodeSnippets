@@ -12,8 +12,6 @@ import { AuthenticationService } from '../../core/services/authentication.servic
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  loading = false;
-  submitted = false;
   returnUrl: string;
   error = '';
 
@@ -40,14 +38,11 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
 
-    this.loading = true;
     this.authenticationService.login(
       this.loginForm.controls.email.value,
       this.loginForm.controls.password.value)
@@ -58,7 +53,6 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.error = error;
-          this.loading = false;
         });
   }
 }

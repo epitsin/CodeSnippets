@@ -1,9 +1,11 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
 
-import IUser from '../interfaces/user';
-
-export interface IUserModel extends IUser, Document {
+export interface UserModel extends Document {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
   // eslint-disable-next-line no-unused-vars
   comparePassword(password: string, callback: any): string;
 }
@@ -19,7 +21,7 @@ const UserSchema: Schema = new Schema({
 
 UserSchema.index({ email: 1 });
 
-UserSchema.pre<IUserModel>('save', function save(next) {
+UserSchema.pre<UserModel>('save', function save(next) {
   const user = this;
   if (!user.isModified('password')) {
     return next();
@@ -30,13 +32,11 @@ UserSchema.pre<IUserModel>('save', function save(next) {
       return next(err);
     }
 
-    console.log(this.password);
     return bcrypt.hash(this.password, salt, null, (_err: Error, hash: string) => {
       if (_err) {
         return next(_err);
       }
 
-      console.log(hash);
       user.password = hash;
       return next();
     });
@@ -44,10 +44,9 @@ UserSchema.pre<IUserModel>('save', function save(next) {
 });
 
 UserSchema.methods.comparePassword = function compare(candidatePassword: string, callback: any) {
-  debugger;
   bcrypt.compare(candidatePassword, this.password, (err: Error, isMatch: boolean) => {
     callback(err, isMatch);
   });
 };
 
-export default mongoose.model<IUserModel>('User', UserSchema);
+export default mongoose.model<UserModel>('User', UserSchema);

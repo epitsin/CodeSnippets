@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { ISnippet } from '../../models/snippet';
+import { UserModel } from '../../models/user';
 
 declare global {
   namespace Express {
     interface Request {
-      snippet: ISnippet
+      authenticatedUser: UserModel
     }
   }
 }
