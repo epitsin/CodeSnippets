@@ -1,4 +1,5 @@
-import * as express from 'express';
+import { Request, Response } from 'express';
+
 import { SnippetDto } from '../interfaces/dtos/snippetDto';
 import SnippetRepository from '../repositories/snippetRepository';
 
@@ -9,69 +10,59 @@ class SnippetController {
     this.snippetRepository = snippetRepository;
   }
 
-  public async getAll(_req: express.Request, res: express.Response) {
+  public async getAll(_req: Request, res: Response) {
     // const { page, limit } = req.query;
 
     // .paginate({ page, limit }).exec();
-    const snippets = await this.snippetRepository.getMany().catch((err) => res.send(err));
+    const snippets = await this.snippetRepository
+      .getMany()
+      .catch((err) => res.status(500).send(err));
+
     return res.json(snippets);
   }
 
-  public async getMine(req: express.Request, res: express.Response) {
-    const snippets = await this.snippetRepository.getMany({ author: req.authenticatedUser._id })
-      .catch((err) => res.send(err));
+  public async getMine(req: Request, res: Response) {
+    const snippets = await this.snippetRepository
+      .getMany({ author: req.authenticatedUser._id })
+      .catch((err) => res.status(500).send(err));
+
     return res.json(snippets);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  public async getById(req: express.Request, res: express.Response) {
-    try {
-      const snippet = await this.snippetRepository.getByIdWithTags(<string>req.params.id);
-      console.log(snippet);
-      if (snippet) {
-        return res.json(snippet);
-      }
-
+  public async getById(req: Request, res: Response) {
+    const snippet = await this.snippetRepository
+      .getByIdWithTags(<string>req.params.id)
+      .catch((err) => res.status(500).send(err));
+    if (!snippet) {
       return res.sendStatus(404);
-    } catch (err) {
-      return res.status(500).send(err);
     }
+
+    return res.json(snippet);
   }
 
-  public async post(req: express.Request, res: express.Response) {
+  public async post(req: Request, res: Response) {
     const snippet = req.body as SnippetDto;
     snippet.author = req.authenticatedUser;
-    try {
-      const createdSnippet = await this.snippetRepository.create(snippet);
+    const createdSnippet = await this.snippetRepository
+      .create(snippet)
+      .catch((err) => res.status(500).send(err));
 
-      return res.status(201).json(createdSnippet);
-    } catch (err) {
-      return res.status(500).send(err);
-    }
+    return res.status(201).json(createdSnippet);
   }
 
-  public async like(req: express.Request, res: express.Response) {
-    const snippet = req.body as SnippetDto;
-    try {
-      const updatedSnippet = await this.snippetRepository.like(
-        snippet._id,
-        req.authenticatedUser._id,
-      );
+  public async like(req: Request, res: Response) {
+    const updatedSnippet = await this.snippetRepository
+      .like(<string>req.params.id, req.authenticatedUser._id)
+      .catch((err) => res.status(500).send(err));
 
-      return res.json(updatedSnippet);
-    } catch (err) {
-      return res.status(500).send(err);
-    }
+    return res.json(updatedSnippet);
   }
 
-  public async delete(req: express.Request, res: express.Response) {
-    try {
-      await this.snippetRepository.delete(<string>req.params.id);
+  public async delete(req: Request, res: Response) {
+    await this.snippetRepository.delete(<string>req.params.id)
+      .catch((err) => res.status(500).send(err));
 
-      return res.sendStatus(204);
-    } catch (err) {
-      return res.status(500).send(err);
-    }
+    return res.sendStatus(204);
   }
 }
 

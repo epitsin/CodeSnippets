@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,18 +9,20 @@ import { AuthenticationService } from '../../core/services/authentication.servic
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
-  returnUrl: string;
-  error = '';
+  public registerForm: FormGroup;
+
+  public returnUrl: string;
+
+  public error = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.currentUserValue) {
@@ -29,7 +30,7 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.registerForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
@@ -38,10 +39,10 @@ export class RegisterComponent implements OnInit {
     });
 
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
   }
 
-  onSubmit() {
+  public onSubmit() {
     // stop here if form is invalid
     if (this.registerForm.invalid) {
       return;
@@ -56,11 +57,12 @@ export class RegisterComponent implements OnInit {
     this.authenticationService.register(user)
       .pipe(first())
       .subscribe(
-        data => {
+        (data) => {
           this.router.navigate([this.returnUrl]);
         },
-        error => {
+        (error) => {
           this.error = error;
-        });
+        },
+      );
   }
 }

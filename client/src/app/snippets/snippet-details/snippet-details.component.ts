@@ -9,7 +9,7 @@ import { SnippetService } from '../../core/services/snippet.service';
 @Component({
   selector: 'app-snippet-details',
   templateUrl: './snippet-details.component.html',
-  styleUrls: ['./snippet-details.component.scss']
+  styleUrls: ['./snippet-details.component.scss'],
 })
 export class SnippetDetailsComponent implements OnInit {
   public snippet: Snippet;
@@ -21,11 +21,12 @@ export class SnippetDetailsComponent implements OnInit {
   ) { }
 
   public get likedByCurrentUser(): boolean {
-    return this.snippet.likes.some((l) => l._id === this.authenticationService.currentUserValue._id)
+    return this.snippet.likes
+      .some((l) => l._id === this.authenticationService.currentUserValue._id);
   }
 
   public async ngOnInit(): Promise<void> {
-    var id = this.route.snapshot.params.id
+    const { id } = this.route.snapshot.params;
     try {
       this.snippet = await this.snippetService.get(id);
     } catch (error) {
@@ -40,14 +41,15 @@ export class SnippetDetailsComponent implements OnInit {
 
     this.snippet.likes.push(this.authenticationService.currentUserValue);
 
-    this.snippetService.like(this.snippet)
+    this.snippetService.like(this.snippet._id)
       .pipe(first())
       .subscribe(
-        data => {
+        (data) => {
           console.log(data);
         },
-        error => {
+        (error) => {
           console.log(error);
-        });
+        },
+      );
   }
 }

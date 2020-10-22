@@ -3,8 +3,8 @@ import TagSchema from '../models/tag';
 import UserSchema, { UserModel } from '../models/user';
 
 class DataInitializer {
-  public static async populateInitialData() {
-    DataInitializer.populateSnippets();
+  public static async populateInitialData(): Promise<void> {
+    return DataInitializer.populateSnippets();
   }
 
   private static async createRelationship(
@@ -68,7 +68,7 @@ class DataInitializer {
       await admin.save();
     }
 
-    this.createRelationship(
+    await this.createRelationship(
       'JavaScript',
       'Validating a Date Format',
       `function ValidateDateFormat(input) {
@@ -89,7 +89,7 @@ class DataInitializer {
       [user2, user3],
     );
 
-    this.createRelationship(
+    await this.createRelationship(
       'CSS',
       'CSS Conic Gradient Example',
       `conic-gradient() = conic-gradient(
@@ -117,7 +117,7 @@ class DataInitializer {
       [user1],
     );
 
-    this.createRelationship(
+    await this.createRelationship(
       'Java',
       'How to Java configuration file with terraform',
       `//For example, to try the AWS two-tier architecture example:

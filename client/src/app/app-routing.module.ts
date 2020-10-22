@@ -13,11 +13,14 @@ import { SnippetDetailsComponent } from './snippets/snippet-details/snippet-deta
 const routes: Routes = [
   { path: '', component: AllSnippetsComponent },
   { path: 'snippets', component: AllSnippetsComponent },
+
   // /new and /mine should be before /:id because they are more specific
   { path: 'snippets/mine', component: MySnippetsComponent, canActivate: [RouteGuard] },
   { path: 'snippets/new', component: CreateSnippetComponent, canActivate: [RouteGuard] },
   { path: 'snippets/:id', component: SnippetDetailsComponent, canActivate: [RouteGuard] },
+
   { path: 'reports', component: TagReportsComponent, canActivate: [RouteGuard] },
+
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 

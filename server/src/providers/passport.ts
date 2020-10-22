@@ -5,8 +5,8 @@ import {
   Response,
 } from 'express';
 import passport from 'passport';
-
 import { ExtractJwt, Strategy } from 'passport-jwt';
+
 import Jwt from '../services/strategies/Jwt';
 import UserSchema from '../models/user';
 import Locals from './locals';

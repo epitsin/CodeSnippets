@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-tags-chart',
   templateUrl: './tags-chart.component.html',
-  styleUrls: ['./tags-chart.component.scss']
+  styleUrls: ['./tags-chart.component.scss'],
 })
 export class TagsChartComponent {
   @Input()
@@ -16,5 +16,6 @@ export class TagsChartComponent {
   public chartType: string;
 
   public chartOptions = { scaleShowVerticalLines: false, responsive: true };
+
   public chartLegend = true;
 }

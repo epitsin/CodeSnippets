@@ -13,7 +13,7 @@ export class AllSnippetsComponent implements OnInit {
 
   constructor(private snippetService: SnippetService) { }
 
-  async ngOnInit(): Promise<void> {
+  public async ngOnInit(): Promise<void> {
     this.snippets = await this.snippetService.getAll();
   }
 }

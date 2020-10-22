@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { first } from 'rxjs/operators';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { SnippetService } from 'src/app/core/services/snippet.service';
 
+import { AuthenticationService } from '../../core/services/authentication.service';
+import { SnippetService } from '../../core/services/snippet.service';
 import { Snippet } from '../../core/models/snippet';
 
 @Component({
   selector: 'app-snippet-list',
   templateUrl: './snippet-list.component.html',
-  styleUrls: ['./snippet-list.component.scss']
+  styleUrls: ['./snippet-list.component.scss'],
 })
 export class SnippetListComponent {
   @Input()
@@ -17,18 +17,19 @@ export class SnippetListComponent {
   public isCurrentUserAdmin: boolean;
 
   constructor(authService: AuthenticationService, private snippetService: SnippetService) {
-    this.isCurrentUserAdmin = authService.currentUserValue.roles?.some((r) => r === 'admin');
+    this.isCurrentUserAdmin = authService.isCurrentUserAdmin;
   }
 
   public deleteSnippet(snippet: Snippet): void {
     this.snippetService.delete(snippet._id)
       .pipe(first())
       .subscribe(
-        data => {
+        (data) => {
           this.snippets.splice(this.snippets.indexOf(snippet), 1);
         },
-        error => {
+        (error) => {
           console.log(error);
-        });
+        },
+      );
   }
 }
