@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Tag } from '../models/tag';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TagService {
-  private apiUrl = 'http://localhost:8626/api'; // TODO: in config
+  private apiUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) { }
 

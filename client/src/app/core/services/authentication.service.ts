@@ -5,10 +5,12 @@ import { map } from 'rxjs/operators';
 import jwt_decode from 'jwt-decode';
 
 import { User } from '../models/user';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
+  private apiUrl = environment.baseUrl;
 
   public currentUser: Observable<User>;
 
@@ -27,7 +29,7 @@ export class AuthenticationService {
   }
 
   public register(user: User) {
-    return this.http.post<IJwtPayload>('http://localhost:8626/api/auth/register', user)
+    return this.http.post<IJwtPayload>(`${this.apiUrl}/auth/register`, user)
       .pipe(map((payload) => {
         localStorage.setItem('currentUser', JSON.stringify(payload));
         this.handleJwtPayload(payload);
@@ -37,7 +39,7 @@ export class AuthenticationService {
   }
 
   public login(email: string, password: string) {
-    return this.http.post<IJwtPayload>('http://localhost:8626/api/auth/login', { email, password })
+    return this.http.post<IJwtPayload>(`${this.apiUrl}/auth/login`, { email, password })
       .pipe(map((payload) => {
         localStorage.setItem('currentUser', JSON.stringify(payload));
         this.handleJwtPayload(payload);
