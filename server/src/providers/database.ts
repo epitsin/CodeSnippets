@@ -7,6 +7,8 @@ export class Database {
   // Initialize your database pool
   public static init(): any {
     const connectionString = Locals.config().mongooseUrl;
+
+    // https://mongoosejs.com/docs/deprecations.html
     const options = {
       useNewUrlParser: true,
 
@@ -15,6 +17,9 @@ export class Database {
 
       // Use MongoDb's finOneAndUpdate instead of findAndModify (deprecated)
       useFindAndModify: false,
+
+      // Use the new topology engine for monitoring servers
+      useUnifiedTopology: true,
     };
 
     mongoose.connect(connectionString, options, (error) => {

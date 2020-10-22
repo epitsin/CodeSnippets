@@ -18,7 +18,6 @@ const SnippetSchema: Schema = new Schema({
   likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
-SnippetSchema.index({ name: 1 });
 SnippetSchema.index({ author: 1 });
 
 export default mongoose.model<SnippetModel>('Snippet', SnippetSchema);

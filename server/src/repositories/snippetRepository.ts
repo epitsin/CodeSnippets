@@ -39,7 +39,7 @@ class SnippetRepository extends Repository<SnippetModel> {
       snippetId,
       { $push: { likes: userId } },
       { new: true },
-    );
+    ).exec();
   }
 }
 

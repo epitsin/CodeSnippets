@@ -30,6 +30,26 @@ class TagController {
       return res.send(err);
     }
   }
+
+  public async getSnippetsReport(_req: express.Request, res: express.Response) {
+    try {
+      const tags = await this.tagRepository.getSnippetsReport();
+      return res.json(tags);
+    } catch (err) {
+      console.log(err);
+      return res.send(err);
+    }
+  }
+
+  public async getLikesReport(_req: express.Request, res: express.Response) {
+    try {
+      const tags = await this.tagRepository.getLikesReport();
+      return res.json(tags);
+    } catch (err) {
+      console.log(err);
+      return res.send(err);
+    }
+  }
 }
 
 export default TagController;
