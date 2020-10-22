@@ -7,10 +7,8 @@ export interface TagModel extends Document {
 }
 
 const TagSchema: Schema = new Schema({
-  name: { type: String, required: true, unique: true },
+  name: { type: String, required: true, unique: true }, // unique index
   snippets: [{ type: Schema.Types.ObjectId, ref: 'Snippet' }],
 });
-
-TagSchema.index({ name: 1 });
 
 export default mongoose.model<TagModel>('Tag', TagSchema);

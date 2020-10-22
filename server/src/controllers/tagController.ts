@@ -10,7 +10,7 @@ class TagController {
   }
 
   public async getAll(_req: express.Request, res: express.Response) {
-    const tags = await this.tagRepository.get().catch((err) => res.send(err));
+    const tags = await this.tagRepository.getMany().catch((err) => res.send(err));
     return res.json(tags);
   }
 

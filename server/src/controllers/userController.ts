@@ -2,8 +2,9 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 
 import UserRepository from '../repositories/userRepository';
-import UserSchema, { UserModel } from '../models/user';
+import { UserModel } from '../models/user';
 import Locals from '../providers/locals';
+import { UserDto } from '../interfaces/dtos/userDto';
 
 class UserController {
   private userRepository: UserRepository;
@@ -13,97 +14,80 @@ class UserController {
   }
 
   public async get(_req: express.Request, res: express.Response) {
-    const users = await this.userRepository.get().catch((err) => res.send(err));
+    const users = await this.userRepository.getMany().catch((err) => res.send(err));
     return res.json(users);
   }
 
-  public static async register(req: express.Request, res: express.Response) {
-    const {
-      email, password, firstName, lastName,
-    } = req.body;
+  public async register(req: express.Request, res: express.Response) {
+    const user = req.body as UserDto;
 
-    const user = new UserSchema({
-      email,
-      password,
-      firstName,
-      lastName,
-    });
-
-    UserSchema.findOne({ email }, (err, existingUser) => {
-      if (err) {
-        return res.json({
-          error: err,
-        });
-      }
-
+    try {
+      const existingUser = await this.userRepository.getOne({ email: user.email });
       if (existingUser) {
-        return res.json({
+        return res.status(401).json({
           error: ['Account with the e-mail address already exists.'],
         });
       }
 
-      return user.save((_err: Error, createdUser: UserModel) => {
-        if (_err) {
-          return res.json({
-            error: _err,
-          });
-        }
+      const createdUser = await this.userRepository.create(user);
+      const token = UserController.createJwtToken(createdUser);
 
-        const token = UserController.createJwtToken(createdUser);
-
-        return res.json({
-          token,
-          expiresIn: Locals.config().jwtExpiresIn * 60,
-        });
+      return res.json({
+        token,
+        expiresIn: Locals.config().jwtExpiresIn * 60,
       });
-    });
+    } catch (err) {
+      return res.status(500).json({
+        error: err,
+      });
+    }
   }
 
-  public static login(
+  public async login(
     req: express.Request,
     res: express.Response,
   ) {
-    const email = req.body.email.toLowerCase();
-    const { password } = req.body;
+    const user = req.body as UserDto;
 
-    UserSchema.findOne({ email }, (err, user) => {
-      if (err) {
-        return res.status(401).json({
-          error: err,
-        });
-      }
-
-      if (!user) {
+    try {
+      const existingUser = await this.userRepository.getOne({ email: user.email });
+      if (!existingUser) {
         return res.status(401).json({
           error: ['User not found!'],
         });
       }
 
-      if (!user.password) {
+      if (!existingUser.password) {
         return res.status(401).json({
           error: ['Please login using your social creds'],
         });
       }
 
-      return user.comparePassword(password, (_err: Error, isMatch: boolean) => {
+      return existingUser.comparePassword(user.password, (_err: Error, isMatch: boolean) => {
         if (_err) {
-          return res.json({ error: _err });
+          console.log(_err);
+          return res.status(500).json({ error: _err });
         }
 
         if (!isMatch) {
-          return res.json({
+          return res.status(401).json({
             error: ['Password does not match!'],
           });
         }
 
-        const token = UserController.createJwtToken(user);
+        const token = UserController.createJwtToken(existingUser);
 
         return res.json({
           token,
           expiresIn: Locals.config().jwtExpiresIn * 60,
         });
       });
-    });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({
+        error: err,
+      });
+    }
   }
 
   private static createJwtToken(user: UserModel) {
@@ -113,6 +97,7 @@ class UserController {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        roles: user.roles,
       },
       Locals.config().appSecret,
       { expiresIn: Locals.config().jwtExpiresIn * 60 },

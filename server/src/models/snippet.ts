@@ -11,7 +11,7 @@ export interface SnippetModel extends Document {
 }
 
 const SnippetSchema: Schema = new Schema({
-  name: { type: String, required: true, unique: true },
+  name: { type: String, required: true, unique: true }, // unique index
   code: { type: String, required: true },
   author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],

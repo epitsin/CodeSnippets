@@ -13,13 +13,12 @@ class SnippetController {
     // const { page, limit } = req.query;
 
     // .paginate({ page, limit }).exec();
-    const snippets = await this.snippetRepository.get().catch((err) => res.send(err));
+    const snippets = await this.snippetRepository.getMany().catch((err) => res.send(err));
     return res.json(snippets);
   }
 
   public async getMine(req: express.Request, res: express.Response) {
-    const query = { author: req.query.userId };
-    const snippets = await this.snippetRepository.get(query)
+    const snippets = await this.snippetRepository.getMany({ author: req.authenticatedUser._id })
       .catch((err) => res.send(err));
     return res.json(snippets);
   }
@@ -35,7 +34,7 @@ class SnippetController {
 
       return res.sendStatus(404);
     } catch (err) {
-      return res.send(err);
+      return res.status(500).send(err);
     }
   }
 
@@ -47,7 +46,7 @@ class SnippetController {
 
       return res.status(201).json(createdSnippet);
     } catch (err) {
-      return res.send(err);
+      return res.status(500).send(err);
     }
   }
 
@@ -61,7 +60,17 @@ class SnippetController {
 
       return res.json(updatedSnippet);
     } catch (err) {
-      return res.send(err);
+      return res.status(500).send(err);
+    }
+  }
+
+  public async delete(req: express.Request, res: express.Response) {
+    try {
+      await this.snippetRepository.delete(<string>req.params.id);
+
+      return res.sendStatus(204);
+    } catch (err) {
+      return res.status(500).send(err);
     }
   }
 }

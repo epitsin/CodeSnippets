@@ -58,6 +58,7 @@ export class AuthenticationService {
         email: tokenInfo.email,
         firstName: tokenInfo.firstName,
         lastName: tokenInfo.lastName,
+        roles: tokenInfo.roles,
         token: payload.token
       }
     }

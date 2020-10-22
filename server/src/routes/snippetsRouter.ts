@@ -20,6 +20,8 @@ class SnippetsRouter {
     router.post('/', AuthenticationController.authenticateJWT, this.snippetController.post.bind(this.snippetController));
     router.post('/like', AuthenticationController.authenticateJWT, this.snippetController.like.bind(this.snippetController));
 
+    router.delete('/:id', AuthenticationController.authenticateJWT, this.snippetController.delete.bind(this.snippetController));
+
     return router;
   }
 }

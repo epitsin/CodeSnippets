@@ -30,4 +30,8 @@ export class SnippetService {
   public like(snippet: Snippet): Observable<Snippet> {
     return this.http.post<Snippet>(`${this.apiUrl}/snippets/like`, snippet);
   }
+
+  public delete(snippetId: string): Observable<any> {
+    return this.http.delete<Snippet>(`${this.apiUrl}/snippets/${snippetId}`);
+  }
 }

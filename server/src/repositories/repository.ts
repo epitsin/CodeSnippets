@@ -7,14 +7,20 @@ class Repository<T extends Document> {
     this.model = model;
   }
 
-  public async get(query = {}, multiple = true) {
-    const results = multiple ? this.model.find(query).exec() : this.model.findOne(query).exec();
-
-    return results;
+  public async getOne(query = {}): Promise<T | null> {
+    return this.model.findOne(query).exec();
   }
 
-  public getById(id: string) {
+  public async getMany(query = {}): Promise<T[]> {
+    return this.model.find(query).exec();
+  }
+
+  public async getById(id: string): Promise<T | null> {
     return this.model.findById(id).exec();
+  }
+
+  public async delete(id: string): Promise<T | null> {
+    return this.model.findByIdAndRemove(id).exec();
   }
 }
 

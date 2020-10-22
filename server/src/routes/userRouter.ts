@@ -12,8 +12,8 @@ class UserRouter {
   get routes(): express.Router {
     const router = express.Router();
     router.get('/', this.controller.get.bind(this.controller));
-    router.post('/login', UserController.login.bind(this.controller));
-    router.post('/register', UserController.register.bind(this.controller));
+    router.post('/login', this.controller.login.bind(this.controller));
+    router.post('/register', this.controller.register.bind(this.controller));
 
     return router;
   }

@@ -1,12 +1,14 @@
 <div class="card mt-4" *ngFor="let snippet of snippets">
-  <mat-card [routerLink]="['/snippets/', snippet._id]">
-    <mat-card-header>
+  <mat-card>
+    <mat-card-header [routerLink]="['/snippets/', snippet._id]">
       <mat-card-title>{{snippet?.name}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <pre>
         <code [innerHTML]="snippet?.code.substring(0, 50) + '...'"></code>
       </pre>
+      <button *ngIf="this.isCurrentUserAdmin" mat-raised-button color="warn"
+        (click)="this.deleteSnippet(snippet)">Delete</button>
     </mat-card-content>
   </mat-card>
 </div>

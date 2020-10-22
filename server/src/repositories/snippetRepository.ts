@@ -1,6 +1,5 @@
 import { SnippetDto } from '../interfaces/dtos/snippetDto';
 import SnippetSchema, { SnippetModel } from '../models/snippet';
-import { TagModel } from '../models/tag';
 import Repository from './repository';
 import TagRepository from './tagRepository';
 
@@ -23,7 +22,7 @@ class SnippetRepository extends Repository<SnippetModel> {
     const document = new this.model({ name: dto.name, code: dto.code, author: dto.author });
     const snippet = await document.save();
     dto.tags.forEach(async (tagDto) => {
-      let tag = await this.tagRepository.get({ name: tagDto.name }, false) as TagModel;
+      let tag = await this.tagRepository.getOne({ name: tagDto.name });
       tag = tag ?? await this.tagRepository.create(tagDto);
 
       snippet.tags.push(tag._id);
@@ -32,6 +31,8 @@ class SnippetRepository extends Repository<SnippetModel> {
       tag.snippets.push(snippet._id);
       await tag.save();
     });
+
+    return snippet;
   }
 
   public async like(snippetId: string, userId: string) {

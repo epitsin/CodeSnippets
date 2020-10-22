@@ -18,12 +18,12 @@ class DataInitializer {
       { name: tagName },
       {},
       { new: true, upsert: true },
-    );
+    ).exec();
     const snippet = await SnippetSchema.findOneAndUpdate(
       { name: snippetName },
       { code: snippetCode, author: author._id, likes: likes.map((l) => l._id) },
       { new: true, upsert: true },
-    );
+    ).exec();
 
     // Use equals to compare ObjectIds.
     if (!snippet.tags.some((t) => t.equals(tag?._id))) {
@@ -44,19 +44,29 @@ class DataInitializer {
       { email: 'harrypotter@hogwards.com' },
       { password: 'harry1234', firstName: 'Harry', lastName: 'Potter' },
       { new: true, upsert: true },
-    );
+    ).exec();
 
     const user2 = await UserSchema.findOneAndUpdate(
       { email: 'hansolo@starwars.com' },
       { password: 'solo1234', firstName: 'Han', lastName: 'Solo' },
       { new: true, upsert: true },
-    );
+    ).exec();
 
     const user3 = await UserSchema.findOneAndUpdate(
       { email: 'jacksparrow@pirates.com' },
       { password: 'sparrow', firstName: 'Jack', lastName: 'Sparrow' },
       { new: true, upsert: true },
-    );
+    ).exec();
+
+    const admin = await UserSchema.findOneAndUpdate(
+      { email: 'gandalf@lordoftherings.com' },
+      { password: 'lord', firstName: 'Just', lastName: 'Gandalf' },
+      { new: true, upsert: true },
+    ).exec();
+    if (!admin.roles.some((r) => r === 'admin')) {
+      admin.roles.push('admin');
+      await admin.save();
+    }
 
     this.createRelationship(
       'JavaScript',

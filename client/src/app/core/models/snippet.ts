@@ -1,7 +1,7 @@
 import { Tag } from './tag';
 import { User } from './user';
 
-export class Snippet {
+export interface Snippet {
   _id?: string;
   name?: string;
   code?: string;
