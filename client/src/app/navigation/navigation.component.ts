@@ -10,27 +10,31 @@ import { AuthenticationService } from '../core/services/authentication.service';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent {
-  title = 'Code Snippets';
-  currentUser: User;
+  public title = 'Code Snippets';
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  public currentUser: User;
+
+  public isCurrentUserAdmin: boolean;
+
+  public isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
-      shareReplay()
+      map((result) => result.matches),
+      shareReplay(),
     );
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
   ) {
-    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+    this.authenticationService.currentUser.subscribe((x) => this.currentUser = x);
+    this.isCurrentUserAdmin = this.authenticationService.isCurrentUserAdmin;
   }
 
-  logout() {
+  public logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);
   }

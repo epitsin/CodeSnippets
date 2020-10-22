@@ -102,6 +102,11 @@ export class CreateSnippetComponent implements OnInit {
       return;
     }
 
+    if (this.tags.length === 0) {
+      this.error = 'Tags are required!';
+      return;
+    }
+
     const snippet: Snippet = {
       name: this.createForm.controls.name.value,
       code: this.createForm.controls.code.value,

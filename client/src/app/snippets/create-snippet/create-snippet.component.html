@@ -4,14 +4,21 @@
       <h2>New Snippet</h2>
       <mat-form-field class="example-full-width">
         <mat-label>Name</mat-label>
-        <input matInput formControlName="name" required>
+        <input matInput formControlName="name" required minlength="3">
+        <mat-error>
+          Please provide a valid name
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="example-full-width">
         <mat-label>Code snippet</mat-label>
-        <textarea matInput formControlName="code" required></textarea>
+        <textarea matInput formControlName="code" required minlength="10"></textarea>
+        <mat-error>
+          Please provide a valid code snippet
+        </mat-error>
       </mat-form-field>
 
+      <mat-error *ngIf="this.error">{{this.error}}</mat-error>
       <mat-form-field class="example-chip-list">
         <mat-chip-list #chipList aria-label="Tag selection">
           <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="remove(tag)">

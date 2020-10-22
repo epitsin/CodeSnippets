@@ -7,7 +7,7 @@
         <tr>
           <td>
             <mat-form-field class="full-width-input p-r-10">
-              <input matInput placeholder="First name" formControlName="firstName" required>
+              <input matInput placeholder="First name" formControlName="firstName" required minlength="3">
               <mat-error>
                 Please provide a valid name
               </mat-error>
@@ -15,7 +15,7 @@
           </td>
           <td>
             <mat-form-field class="full-width-input">
-              <input matInput placeholder="Last name" formControlName="lastName" required>
+              <input matInput placeholder="Last name" formControlName="lastName" required minlength="3">
               <mat-error>
                 Please provide a valid name
               </mat-error>
@@ -31,7 +31,7 @@
       </mat-form-field>
       <br />
       <mat-form-field class="full-width-input">
-        <input matInput type="password" placeholder="Password" formControlName="password" required>
+        <input matInput type="password" placeholder="Password" formControlName="password" required minlength="4">
         <mat-error>
           Please provide a valid password
         </mat-error>

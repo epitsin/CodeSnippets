@@ -16,9 +16,9 @@ export interface UserModel extends Document {
 
 const UserSchema: Schema = new Schema({
   email: { type: String, required: true, unique: true }, // unique index
-  password: { type: String, required: true },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  password: { type: String, required: true, min: 4 },
+  firstName: { type: String, required: true, min: 3 },
+  lastName: { type: String, required: true, min: 3 },
   // roles: [{ type: Schema.Types.ObjectId, ref: 'Role' }],
   roles: [{
     type: String,
