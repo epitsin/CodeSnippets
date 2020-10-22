@@ -1,0 +1,24 @@
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">cloud_circle</mat-icon>
+      Cloud
+    </ng-template>
+    <mat-radio-group aria-label="Select an option" (change)="this.cloudRadioChange($event)">
+      <mat-radio-button value="likes" [checked]="true">Likes</mat-radio-button>
+      <mat-radio-button value="snippets">Snippets</mat-radio-button>
+    </mat-radio-group>
+    <app-tags-cloud [data]="this.cloudData"></app-tags-cloud>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">bar_chart</mat-icon>
+      Chart
+    </ng-template>
+    <mat-radio-group aria-label="Select an option" (change)="this.chartRadioChange($event)">
+      <mat-radio-button value="bar" [checked]="true">Bar</mat-radio-button>
+      <mat-radio-button value="pie">Pie</mat-radio-button>
+    </mat-radio-group>
+    <app-tags-chart [labels]="this.chartLabels" [data]="this.chartData" [chartType]="this.chartType"></app-tags-chart>
+  </mat-tab>
+</mat-tab-group>

@@ -16,6 +16,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatRadioModule } from '@angular/material/radio';
+
+import { ChartsModule } from 'ng2-charts';
+import { TagCloudModule } from 'angular-tag-cloud-module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +36,9 @@ import { CreateSnippetComponent } from './snippets/create-snippet/create-snippet
 import { AllSnippetsComponent } from './snippets/all-snippets/all-snippets.component';
 import { MySnippetsComponent } from './snippets/my-snippets/my-snippets.component';
 import { SnippetListComponent } from './snippets/snippet-list/snippet-list.component';
+import { TagReportsComponent } from './reports/tag-reports/tag-reports.component';
+import { TagsChartComponent } from './reports/tags-chart/tags-chart.component';
+import { TagsCloudComponent } from './reports/tags-cloud/tags-cloud.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +51,9 @@ import { SnippetListComponent } from './snippets/snippet-list/snippet-list.compo
     CreateSnippetComponent,
     AllSnippetsComponent,
     MySnippetsComponent,
+    TagReportsComponent,
+    TagsChartComponent,
+    TagsCloudComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +72,11 @@ import { SnippetListComponent } from './snippets/snippet-list/snippet-list.compo
     MatSidenavModule,
     MatListModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    MatTabsModule,
+    MatRadioModule,
+    ChartsModule,
+    TagCloudModule,
   ],
   providers: [
     AuthenticationService,

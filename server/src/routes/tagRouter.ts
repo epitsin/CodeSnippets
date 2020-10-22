@@ -13,6 +13,8 @@ class TagsRouter {
   get routes(): express.Router {
     const router = express.Router();
     router.get('/', this.tagController.getAll.bind(this.tagController));
+    router.get('/reports/snippets', this.tagController.getSnippetsReport.bind(this.tagController));
+    router.get('/reports/likes', this.tagController.getLikesReport.bind(this.tagController));
     router.post('/', AuthenticationController.authenticateJWT, this.tagController.post.bind(this.tagController));
 
     return router;

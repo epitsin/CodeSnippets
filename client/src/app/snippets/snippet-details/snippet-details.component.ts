@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
 
+import { AuthenticationService } from '../../core/services/authentication.service';
 import { Snippet } from '../../core/models/snippet';
 import { SnippetService } from '../../core/services/snippet.service';
 

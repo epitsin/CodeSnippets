@@ -14,10 +14,11 @@ class SnippetsRouter {
   get routes(): express.Router {
     const router = express.Router();
     router.get('/', this.snippetController.getAll.bind(this.snippetController));
+    router.get('/mine', AuthenticationController.authenticateJWT, this.snippetController.getMine.bind(this.snippetController));
+    router.get('/:id', AuthenticationController.authenticateJWT, this.snippetController.getById.bind(this.snippetController));
+
     router.post('/', AuthenticationController.authenticateJWT, this.snippetController.post.bind(this.snippetController));
     router.post('/like', AuthenticationController.authenticateJWT, this.snippetController.like.bind(this.snippetController));
-
-    router.get('/:id', AuthenticationController.authenticateJWT, this.snippetController.getById.bind(this.snippetController));
 
     return router;
   }

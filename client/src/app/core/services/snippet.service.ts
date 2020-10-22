@@ -16,7 +16,7 @@ export class SnippetService {
   }
 
   public getMine(): Promise<Snippet[]> {
-    return this.http.get<Snippet[]>(`${this.apiUrl}/snippets?userId=${this.authenticationService.currentUserValue._id}`).toPromise();
+    return this.http.get<Snippet[]>(`${this.apiUrl}/snippets/mine`).toPromise();
   }
 
   public get(id: string): Promise<Snippet> {

@@ -15,6 +15,10 @@
         <mat-icon mat-list-icon>fiber_new</mat-icon>
         <h4 mat-line>Create new</h4>
       </mat-list-item>
+      <mat-list-item routerLink="reports" *ngIf="this.currentUser">
+        <mat-icon mat-list-icon>assessment</mat-icon>
+        <h4 mat-line>Reports</h4>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
