@@ -9,8 +9,12 @@ export class Database {
     const connectionString = Locals.config().mongooseUrl;
     const options = {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+
+      // Use createIndex instead of ensureIndex (deprecated)
       useCreateIndex: true,
+
+      // Use MongoDb's finOneAndUpdate instead of findAndModify (deprecated)
+      useFindAndModify: false,
     };
 
     mongoose.connect(connectionString, options, (error) => {

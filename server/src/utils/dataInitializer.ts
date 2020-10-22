@@ -1,36 +1,29 @@
-import SnippetSchema, { SnippetModel } from '../models/snippet';
-import TagSchema, { TagModel } from '../models/tag';
+import SnippetSchema from '../models/snippet';
+import TagSchema from '../models/tag';
 import UserSchema, { UserModel } from '../models/user';
 
 class DataInitializer {
   public static async populateInitialData() {
     DataInitializer.populateSnippets();
-    DataInitializer.populateUsers();
-  }
-
-  private static async createTag(name: string): Promise<TagModel> {
-    const jsTag = new TagSchema({ name });
-    const createdTag = await jsTag.save();
-
-    return createdTag;
-  }
-
-  private static async createSnippet(name: string, code: string): Promise<SnippetModel> {
-    const snippet = new SnippetSchema({ name, code });
-    const createdSnippet = await snippet.save();
-
-    return createdSnippet;
   }
 
   private static async createRelationship(
     tagName: string,
     snippetName: string,
     snippetCode: string,
+    author: UserModel,
+    likes: UserModel[],
   ): Promise<void> {
-    let tag = await TagSchema.findOne({ name: tagName }).exec();
-    tag = tag ?? await this.createTag(tagName);
-    let snippet = await SnippetSchema.findOne({ name: snippetName }).exec();
-    snippet = snippet ?? await this.createSnippet(snippetName, snippetCode);
+    const tag = await TagSchema.findOneAndUpdate(
+      { name: tagName },
+      {},
+      { new: true, upsert: true },
+    );
+    const snippet = await SnippetSchema.findOneAndUpdate(
+      { name: snippetName },
+      { code: snippetCode, author: author._id, likes: likes.map((l) => l._id) },
+      { new: true, upsert: true },
+    );
 
     // Use equals to compare ObjectIds.
     if (!snippet.tags.some((t) => t.equals(tag?._id))) {
@@ -47,7 +40,28 @@ class DataInitializer {
 
   private static async populateSnippets() {
     // TODO: read from file
-    this.createRelationship('JavaScript', 'Validating a Date Format', `function ValidateDateFormat(input) {
+    const user1 = await UserSchema.findOneAndUpdate(
+      { email: 'harrypotter@hogwards.com' },
+      { password: 'harry1234', firstName: 'Harry', lastName: 'Potter' },
+      { new: true, upsert: true },
+    );
+
+    const user2 = await UserSchema.findOneAndUpdate(
+      { email: 'hansolo@starwars.com' },
+      { password: 'solo1234', firstName: 'Han', lastName: 'Solo' },
+      { new: true, upsert: true },
+    );
+
+    const user3 = await UserSchema.findOneAndUpdate(
+      { email: 'jacksparrow@pirates.com' },
+      { password: 'sparrow', firstName: 'Jack', lastName: 'Sparrow' },
+      { new: true, upsert: true },
+    );
+
+    this.createRelationship(
+      'JavaScript',
+      'Validating a Date Format',
+      `function ValidateDateFormat(input) {
       var dateString = input.value;
    
       var regex = /(((0[1-9]|1[0-2])\\/(0|1)[0-9]|2[0-9]|3[0-1])\\/((19|20)\\d\\d))$/;
@@ -60,9 +74,15 @@ class DataInitializer {
           input.focus();
           input.select();
       }
-  };`);
+  };`,
+      user1,
+      [user2, user3],
+    );
 
-    this.createRelationship('CSS', 'CSS Conic Gradient Example', `conic-gradient() = conic-gradient(
+    this.createRelationship(
+      'CSS',
+      'CSS Conic Gradient Example',
+      `conic-gradient() = conic-gradient(
     [ from <angle> ]? [ at <position> ]?,
     <angular-color-stop-list>
   )
@@ -82,9 +102,15 @@ class DataInitializer {
     background: conic-gradient(#fff 0%, #000 100%);
     /* Explicitly state the angle of the starting color in degrees and the ending color by a full turn of the circle */
     background: conic-gradient(#fff 0deg, #000 1turn);
-  }`);
+  }`,
+      user2,
+      [user1],
+    );
 
-    this.createRelationship('Java', 'How to Java configuration file with terraform', `//For example, to try the AWS two-tier architecture example:
+    this.createRelationship(
+      'Java',
+      'How to Java configuration file with terraform',
+      `//For example, to try the AWS two-tier architecture example:
 
 git clone https://github.com/terraform-providers/terraform-provider-aws.git
 cd terraform-provider-aws/examples/two-tier
@@ -94,24 +120,10 @@ cd terraform-provider-aws/examples/two-tier
 $ terraform init
 ...
 $ terraform apply
-...`);
-  }
-
-  private static async populateUsers() {
-    const existingData = await UserSchema.find({});
-    if (existingData.length) {
-      return;
-    }
-
-    // TODO: read from file
-    const user: UserModel = new UserSchema({
-      email: 'harrypotter@hogwards.com',
-      password: 'harry1234',
-      firstName: 'Harry',
-      lastName: 'Potter',
-    });
-
-    await user.save();
+...`,
+      user3,
+      [],
+    );
   }
 }
 

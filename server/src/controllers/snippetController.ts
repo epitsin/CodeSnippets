@@ -9,17 +9,17 @@ class SnippetController {
     this.snippetRepository = snippetRepository;
   }
 
-  public async getAll(req: express.Request, res: express.Response) {
+  public async getAll(_req: express.Request, res: express.Response) {
     // const { page, limit } = req.query;
 
     // .paginate({ page, limit }).exec();
-    const query = { author: req.query.userId };
-    const snippets = await this.snippetRepository.get(query).catch((err) => res.send(err));
+    const snippets = await this.snippetRepository.get().catch((err) => res.send(err));
     return res.json(snippets);
   }
 
   public async getMine(req: express.Request, res: express.Response) {
-    const snippets = await this.snippetRepository.get({ author: req.query.userId })
+    const query = { author: req.query.userId };
+    const snippets = await this.snippetRepository.get(query)
       .catch((err) => res.send(err));
     return res.json(snippets);
   }
@@ -28,6 +28,7 @@ class SnippetController {
   public async getById(req: express.Request, res: express.Response) {
     try {
       const snippet = await this.snippetRepository.getByIdWithTags(<string>req.params.id);
+      console.log(snippet);
       if (snippet) {
         return res.json(snippet);
       }
@@ -39,13 +40,26 @@ class SnippetController {
   }
 
   public async post(req: express.Request, res: express.Response) {
-    debugger;
     const snippet = req.body as SnippetDto;
     snippet.author = req.authenticatedUser;
     try {
       const createdSnippet = await this.snippetRepository.create(snippet);
 
       return res.status(201).json(createdSnippet);
+    } catch (err) {
+      return res.send(err);
+    }
+  }
+
+  public async like(req: express.Request, res: express.Response) {
+    const snippet = req.body as SnippetDto;
+    try {
+      const updatedSnippet = await this.snippetRepository.like(
+        snippet._id,
+        req.authenticatedUser._id,
+      );
+
+      return res.json(updatedSnippet);
     } catch (err) {
       return res.send(err);
     }

@@ -26,4 +26,8 @@ export class SnippetService {
   public create(snippet: Snippet): Observable<Snippet> {
     return this.http.post<Snippet>(`${this.apiUrl}/snippets`, snippet);
   }
+
+  public like(snippet: Snippet): Observable<Snippet> {
+    return this.http.post<Snippet>(`${this.apiUrl}/snippets/like`, snippet);
+  }
 }

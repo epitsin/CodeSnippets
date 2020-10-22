@@ -11,7 +11,11 @@ class SnippetRepository extends Repository<SnippetModel> {
   }
 
   public getByIdWithTags(id: string) {
-    return this.model.findById(id).populate('tags', 'name').exec();
+    return this.model.findById(id)
+      .populate('tags', 'name')
+      .populate('likes', '_id')
+      .populate('author', '_id firstName lastName')
+      .exec();
   }
 
   public async create(dto: SnippetDto) {
@@ -28,6 +32,14 @@ class SnippetRepository extends Repository<SnippetModel> {
       tag.snippets.push(snippet._id);
       await tag.save();
     });
+  }
+
+  public async like(snippetId: string, userId: string) {
+    return this.model.findByIdAndUpdate(
+      snippetId,
+      { $push: { likes: userId } },
+      { new: true },
+    );
   }
 }
 

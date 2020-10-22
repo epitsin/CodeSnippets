@@ -11,4 +11,6 @@ const TagSchema: Schema = new Schema({
   snippets: [{ type: Schema.Types.ObjectId, ref: 'Snippet' }],
 });
 
+TagSchema.index({ name: 1 });
+
 export default mongoose.model<TagModel>('Tag', TagSchema);

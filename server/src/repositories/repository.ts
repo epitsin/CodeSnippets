@@ -18,5 +18,4 @@ class Repository<T extends Document> {
   }
 }
 
-
 export default Repository;

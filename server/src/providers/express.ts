@@ -18,7 +18,7 @@ class Express {
   constructor() {
     this.express = express();
 
-    this.express.use(bodyParser.json()); // bug? why isn't it working from the separate file
+    this.express.use(bodyParser.json());
 
     this.mountDotEnv();
     this.mountMiddlewares();
