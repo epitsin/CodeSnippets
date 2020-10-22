@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import jwt_decode from "jwt-decode";
+import jwt_decode from 'jwt-decode';
 
 import { User } from '../models/user';
 
 @Injectable()
 export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
+
   public currentUser: Observable<User>;
 
   constructor(private http: HttpClient) {
@@ -21,9 +22,13 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
-  register(user: User) {
-    return this.http.post<IJwtPayload>(`http://localhost:8626/api/users/register`, user)
-      .pipe(map(payload => {
+  public get isCurrentUserAdmin(): boolean {
+    return this.currentUserValue?.roles?.some((r) => r === 'admin');
+  }
+
+  public register(user: User) {
+    return this.http.post<IJwtPayload>('http://localhost:8626/api/auth/register', user)
+      .pipe(map((payload) => {
         localStorage.setItem('currentUser', JSON.stringify(payload));
         this.handleJwtPayload(payload);
 
@@ -31,9 +36,9 @@ export class AuthenticationService {
       }));
   }
 
-  login(email: string, password: string) {
-    return this.http.post<IJwtPayload>(`http://localhost:8626/api/users/login`, { email, password })
-      .pipe(map(payload => {
+  public login(email: string, password: string) {
+    return this.http.post<IJwtPayload>('http://localhost:8626/api/auth/login', { email, password })
+      .pipe(map((payload) => {
         localStorage.setItem('currentUser', JSON.stringify(payload));
         this.handleJwtPayload(payload);
 
@@ -41,7 +46,7 @@ export class AuthenticationService {
       }));
   }
 
-  logout() {
+  public logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.handleJwtPayload(null);
@@ -51,7 +56,10 @@ export class AuthenticationService {
     let user: User = null;
 
     if (payload && payload.token) {
-      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      /**
+       * store user details and jwt token in local storage
+       * to keep user logged in between page refreshes
+       */
       const tokenInfo = this.decodeJwtPayload(payload.token);
       user = {
         _id: tokenInfo._id,
@@ -59,12 +67,12 @@ export class AuthenticationService {
         firstName: tokenInfo.firstName,
         lastName: tokenInfo.lastName,
         roles: tokenInfo.roles,
-        token: payload.token
-      }
+        token: payload.token,
+      };
     }
 
     if (this.currentUserSubject) {
-      this.currentUserSubject.next(user)
+      this.currentUserSubject.next(user);
     } else {
       this.currentUserSubject = new BehaviorSubject<User>(user);
     }
@@ -73,8 +81,7 @@ export class AuthenticationService {
   private decodeJwtPayload(token: string) {
     try {
       return jwt_decode(token);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       return null;
     }

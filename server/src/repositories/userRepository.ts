@@ -2,7 +2,7 @@ import { UserDto } from '../interfaces/dtos/userDto';
 import UserSchema, { UserModel } from '../models/user';
 import Repository from './repository';
 
-class UserRepository extends Repository<UserModel> { // IUser?
+class UserRepository extends Repository<UserModel> {
   constructor() {
     super(UserSchema);
   }

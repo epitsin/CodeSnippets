@@ -12,7 +12,6 @@ class Jwt {
     };
 
     passport.use('JWT', new Strategy(options, (jwtPayload, done) => {
-      // email or sub?
       UserSchema.findOne({ email: jwtPayload.email }, (err, user) => {
         if (err) {
           return done(err, false);

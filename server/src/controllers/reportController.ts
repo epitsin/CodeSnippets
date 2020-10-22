@@ -1,31 +1,29 @@
 import { Request, Response } from 'express';
 
-import { TagModel } from '../models/tag';
 import TagRepository from '../repositories/tagRepository';
 
-class TagController {
+class ReportController {
   private tagRepository: TagRepository;
 
   constructor(tagRepository: TagRepository) {
     this.tagRepository = tagRepository;
   }
 
-  public async getAll(_req: Request, res: Response) {
+  public async getSnippetsReport(_req: Request, res: Response) {
     const tags = await this.tagRepository
-      .getMany()
+      .getSnippetsReport()
       .catch((err) => res.status(500).send(err));
 
     return res.json(tags);
   }
 
-  public async post(req: Request, res: Response) {
-    const tag = req.body as TagModel;
-    const createdTag = await this.tagRepository
-      .create(tag)
+  public async getLikesReport(_req: Request, res: Response) {
+    const tags = await this.tagRepository
+      .getLikesReport()
       .catch((err) => res.status(500).send(err));
 
-    return res.status(201).json(createdTag);
+    return res.json(tags);
   }
 }
 
-export default TagController;
+export default ReportController;
