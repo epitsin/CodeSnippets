@@ -36,19 +36,19 @@ That's it! Code snippets application should be running.
 To be able to create and view snippets, register a new user or log in with one of the following
 
 ```bash
-$ harrypotter@hogwards.com
-$ harry1234
+email: harrypotter@hogwards.com
+password: harry1234
 ```
 
 ```bash
-$ hansolo@starwars.com
-$ solo1234
+email: hansolo@starwars.com
+password: solo1234
 ```
 To be able to delete snippets and view reports on snippet tags, register log in with the following admin account
 
 ```bash
-$ gandalf@lordoftherings.com
-$ lord
+email: gandalf@lordoftherings.com
+password: lord
 ```
 
 ## Testing The Application
