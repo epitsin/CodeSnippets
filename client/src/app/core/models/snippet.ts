@@ -7,5 +7,5 @@ export interface Snippet {
   code?: string;
   author?: User;
   tags?: string[];
-  likes?: User[]
+  likes?: string[]
 }

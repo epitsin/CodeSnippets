@@ -14,7 +14,7 @@ class UserController {
       .getMany()
       .catch((err) => res.status(500).send(err));
 
-    return res.json(users);
+    return res.status(200).json(users);
   }
 }
 

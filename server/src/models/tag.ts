@@ -14,7 +14,7 @@ const TagSchema: Schema = new Schema({
   snippets: [{ type: Schema.Types.ObjectId, ref: 'Snippet' }],
 });
 
-// TODO: make it work for findOneAndUpdate as well
+// TODO: make it work for findOneAndUpdate as well (isModified alternative for Query<TagModel> ?)
 TagSchema.pre<TagModel>('save', function lowerCase(this: TagModel, next: HookNextFunction) {
   if (!this.isModified('name')) {
     return next();

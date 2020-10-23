@@ -11,14 +11,12 @@ class SnippetController {
   }
 
   public async getAll(_req: Request, res: Response) {
-    // const { page, limit } = req.query;
-
-    // .paginate({ page, limit }).exec();
+    // TODO: .paginate({ page, limit }).exec();
     const snippets = await this.snippetRepository
       .getMany()
       .catch((err) => res.status(500).send(err));
 
-    return res.json(snippets);
+    return res.status(200).json(snippets);
   }
 
   public async getMine(req: Request, res: Response) {
@@ -26,18 +24,18 @@ class SnippetController {
       .getMany({ author: req.authenticatedUser._id })
       .catch((err) => res.status(500).send(err));
 
-    return res.json(snippets);
+    return res.status(200).json(snippets);
   }
 
   public async getById(req: Request, res: Response) {
     const snippet = await this.snippetRepository
-      .getByIdWithTags(<string>req.params.id)
+      .getByIdWithAuthor(<string>req.params.id)
       .catch((err) => res.status(500).send(err));
     if (!snippet) {
       return res.sendStatus(404);
     }
 
-    return res.json(snippet);
+    return res.status(200).json(snippet);
   }
 
   public async create(req: Request, res: Response) {
@@ -61,7 +59,7 @@ class SnippetController {
       .like(<string>req.params.id, req.authenticatedUser._id)
       .catch((err) => res.status(500).send(err));
 
-    return res.json(updatedSnippet);
+    return res.status(200).json(updatedSnippet);
   }
 
   public async dislike(req: Request, res: Response) {
@@ -69,7 +67,7 @@ class SnippetController {
       .dislike(<string>req.params.id, req.authenticatedUser._id)
       .catch((err) => res.status(500).send(err));
 
-    return res.json(updatedSnippet);
+    return res.status(200).json(updatedSnippet);
   }
 
   public async delete(req: Request, res: Response) {

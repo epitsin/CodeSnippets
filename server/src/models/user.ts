@@ -1,14 +1,11 @@
 import mongoose, { Schema, Document, HookNextFunction } from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
 
-// import { RoleModel } from './role';
-
 export interface UserModel extends Document {
   email: string;
   password: string;
   firstName: string;
   lastName: string;
-  // roles: RoleModel['_id'][],
   roles: string[],
   comparePassword(password: string, callback: any): string;
 }
@@ -18,7 +15,6 @@ const UserSchema: Schema = new Schema({
   password: { type: String, required: true, min: 4 },
   firstName: { type: String, required: true, min: 3 },
   lastName: { type: String, required: true, min: 3 },
-  // roles: [{ type: Schema.Types.ObjectId, ref: 'Role' }],
   roles: [{
     type: String,
     enum: ['basic', 'admin'],
@@ -28,6 +24,7 @@ const UserSchema: Schema = new Schema({
 
 });
 
+// TODO: make it work for findOneAndUpdate as well (isModified alternative for Query<UserModel> ?)
 UserSchema.pre<UserModel>('save', function encryptPassword(this: UserModel, next: HookNextFunction) {
   const user = this;
   if (!user.isModified('password')) {

@@ -14,7 +14,7 @@ class ReportController {
       .getSnippetsReport()
       .catch((err) => res.status(500).send(err));
 
-    return res.json(tags);
+    return res.status(200).json(tags);
   }
 
   public async getLikesReport(_req: Request, res: Response) {
@@ -22,7 +22,7 @@ class ReportController {
       .getLikesReport()
       .catch((err) => res.status(500).send(err));
 
-    return res.json(tags);
+    return res.status(200).json(tags);
   }
 }
 

@@ -12,10 +12,8 @@ class Locals {
 
     const url = process.env.APP_URL || `http://localhost:${process.env.PORT}`;
     const port = process.env.PORT || 3000;
-    const appSecret = process.env.APP_SECRET || 'This is your responsibility!';
+    const appSecret = process.env.APP_SECRET || 'secret';
     const mongooseUrl = process.env.MONGO_URL;
-    const maxUploadLimit = process.env.APP_MAX_UPLOAD_LIMIT || '50mb';
-    const maxParameterLimit = process.env.APP_MAX_PARAMETER_LIMIT || '50mb';
 
     const isCORSEnabled = process.env.CORS_ENABLED || true;
     const jwtExpiresIn = process.env.JWT_EXPIRES_IN || 30;
@@ -26,8 +24,6 @@ class Locals {
       apiPrefix,
       isCORSEnabled,
       jwtExpiresIn,
-      maxUploadLimit,
-      maxParameterLimit,
       mongooseUrl,
       port,
       url,

@@ -1,13 +1,7 @@
-import {
-  Application,
-  NextFunction,
-  Request,
-  Response,
-} from 'express';
+import { Application } from 'express';
 import passport from 'passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import Jwt from '../services/strategies/Jwt';
 import UserSchema from '../models/user';
 import Locals from './locals';
 
@@ -26,13 +20,11 @@ class Passport {
       });
     });
 
-    // Passport.mountJwtStrategy();
     const options = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: Locals.config().appSecret,
     };
     passport.use('JWT', new Strategy(options, (jwtPayload, done) => {
-      // email or sub?
       UserSchema.findOne({ email: jwtPayload.email }, (err, user) => {
         if (err) {
           return done(err, false);
@@ -51,24 +43,6 @@ class Passport {
     }));
 
     return express;
-  }
-
-  public static mountJwtStrategy(): void {
-    try {
-      Jwt.init(passport);
-      console.log(passport.Strategy);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  public static isAuthenticated(req: Request, res: Response, next: NextFunction): any {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-
-    req.flash('errors', 'Please Log-In to access any further!');
-    return res.redirect('/login');
   }
 }
 

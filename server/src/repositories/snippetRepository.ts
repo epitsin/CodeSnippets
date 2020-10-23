@@ -9,16 +9,16 @@ class SnippetRepository extends Repository<SnippetModel> {
     super(SnippetSchema);
   }
 
-  public getByIdWithTags(id: string) {
+  public getByIdWithAuthor(id: string) {
     return this.model.findById(id)
-      .populate('likes', '_id')
       .populate('author', '_id firstName lastName')
       .exec();
   }
 
   public async create(dto: SnippetDto) {
-    let uniqueTags = dto.tags.map((item) => item.toString().toLowerCase());
-    uniqueTags = [...new Set(uniqueTags)];
+    const snippetTags = dto.tags.map((item) => item.toString().toLowerCase());
+    const uniqueTags = [...new Set(snippetTags)]; // Set allows only unique values
+
     const document = new this.model({
       name: dto.name,
       code: dto.code,
@@ -29,6 +29,8 @@ class SnippetRepository extends Repository<SnippetModel> {
 
     // eslint-disable-next-line no-restricted-syntax
     for await (const tag of dto.tags) {
+      // TODO: Use findOneAndUpdate(upsert:true)
+      // Find case insensitive (just in case)
       const result = await this.tagRepository.getOne({ name: { $regex: new RegExp(tag, 'i') } });
       if (!result) {
         const tagDto: TagDto = {
@@ -44,29 +46,6 @@ class SnippetRepository extends Repository<SnippetModel> {
 
     return snippet;
   }
-
-  // public async create(dto: SnippetDto) {
-  //   const createdTagPromises = dto.tags.map(async (tagDto) => this.tagRepository.upsert(tagDto));
-
-  //   const tags = await Promise.all(createdTagPromises);
-
-  //   const document = new this.model({
-  //     name: dto.name,
-  //     code: dto.code,
-  //     author: dto.author,
-  //     tags: tags.map((t) => t?._id),
-  //   });
-  //   const snippet = await document.save();
-
-  //   const updatedTagPromises = tags.map((tag) => {
-  //     tag?.snippets.push(snippet._id);
-  //     return tag?.save();
-  //   });
-
-  //   await Promise.all(updatedTagPromises);
-
-  //   return snippet;
-  // }
 
   public async like(snippetId: string, userId: string) {
     return this.model.findByIdAndUpdate(

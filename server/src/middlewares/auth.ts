@@ -31,7 +31,7 @@ class Auth {
       }
 
       if (user.roles.indexOf('admin') < 0) {
-        return res.status(403).json({ error: ['User not admin!'] });
+        return res.status(403).json({ error: ['User is not an admin!'] });
       }
 
       req.authenticatedUser = user;

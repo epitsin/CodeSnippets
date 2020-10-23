@@ -24,7 +24,7 @@ export class SnippetDetailsComponent implements OnInit {
   }
 
   public get isSnippetLikedByCurrentUser(): boolean {
-    return this.snippet.likes.some((l) => l._id === this.authenticationService.currentUserValue._id);
+    return this.snippet.likes.some((l) => l === this.authenticationService.currentUserValue._id);
   }
 
   public async ngOnInit(): Promise<void> {
@@ -37,7 +37,7 @@ export class SnippetDetailsComponent implements OnInit {
       return;
     }
 
-    this.snippet.likes.push(this.authenticationService.currentUserValue);
+    this.snippet.likes.push(this.authenticationService.currentUserValue._id);
 
     await this.snippetService.like(this.snippet._id);
   }
@@ -47,7 +47,7 @@ export class SnippetDetailsComponent implements OnInit {
       return;
     }
 
-    this.snippet.likes.splice(this.snippet.likes.indexOf(this.authenticationService.currentUserValue), 1);
+    this.snippet.likes.splice(this.snippet.likes.indexOf(this.authenticationService.currentUserValue._id), 1);
 
     await this.snippetService.dislike(this.snippet._id);
   }
