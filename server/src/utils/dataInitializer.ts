@@ -39,30 +39,51 @@ class DataInitializer {
   }
 
   private static async populateSnippets() {
-    // TODO: read from file
-    const user1 = await UserSchema.findOneAndUpdate(
-      { email: 'harrypotter@hogwards.com' },
-      { password: 'harry1234', firstName: 'Harry', lastName: 'Potter' },
-      { new: true, upsert: true },
-    ).exec();
+    // Using find and create separately (instead of findOneAndUpdate) because of the save pre hook
+    const user1Email = 'harrypotter@hogwards.com';
+    let user1 = await UserSchema.findOne({ email: user1Email }).exec();
+    if (!user1) {
+      user1 = await (new UserSchema({
+        email: user1Email,
+        password: 'harry1234',
+        firstName: 'Harry',
+        lastName: 'Potter',
+      })).save();
+    }
 
-    const user2 = await UserSchema.findOneAndUpdate(
-      { email: 'hansolo@starwars.com' },
-      { password: 'solo1234', firstName: 'Han', lastName: 'Solo' },
-      { new: true, upsert: true },
-    ).exec();
+    const user2Email = 'hansolo@starwars.com';
+    let user2 = await UserSchema.findOne({ email: user2Email }).exec();
+    if (!user2) {
+      user2 = await (new UserSchema({
+        email: user2Email,
+        password: 'solo1234',
+        firstName: 'Han',
+        lastName: 'Solo',
+      })).save();
+    }
 
-    const user3 = await UserSchema.findOneAndUpdate(
-      { email: 'jacksparrow@pirates.com' },
-      { password: 'sparrow', firstName: 'Jack', lastName: 'Sparrow' },
-      { new: true, upsert: true },
-    ).exec();
+    const user3Email = 'jacksparrow@pirates.com';
+    let user3 = await UserSchema.findOne({ email: user3Email }).exec();
+    if (!user3) {
+      user3 = await (new UserSchema({
+        email: user3Email,
+        password: 'sparrow',
+        firstName: 'Jack',
+        lastName: 'Sparrow',
+      })).save();
+    }
 
-    const admin = await UserSchema.findOneAndUpdate(
-      { email: 'gandalf@lordoftherings.com' },
-      { password: 'lord', firstName: 'Just', lastName: 'Gandalf' },
-      { new: true, upsert: true },
-    ).exec();
+    const adminEmail = 'gandalf@lordoftherings.com';
+    let admin = await UserSchema.findOne({ email: adminEmail }).exec();
+    if (!admin) {
+      admin = await (new UserSchema({
+        email: adminEmail,
+        password: 'lord',
+        firstName: 'Just',
+        lastName: 'Gandalf',
+      })).save();
+    }
+
     if (!admin.roles.some((r) => r === 'admin')) {
       admin.roles.push('admin');
       await admin.save();

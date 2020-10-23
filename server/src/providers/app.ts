@@ -1,24 +1,28 @@
+/* eslint-disable class-methods-use-this */
 import dotenv from 'dotenv';
 import path from 'path';
+import { Server } from 'http';
 
 import Express from './express';
 import { Database } from './database';
 
 class App {
-  // Loads your dotenv file
-  public static loadConfiguration(): void {
+  public loadConfiguration(): void {
     dotenv.config({ path: path.join(__dirname, '../../.env') });
   }
 
-  // Loads your Server
-  public static loadServer(): void {
-    Express.init();
+  public async loadDatabase(): Promise<void> {
+    return Database.init();
   }
 
-  // Loads the Database Pool
-  public static loadDatabase(): void {
-    Database.init();
+  public async loadServer(): Promise<Server> {
+    this.loadConfiguration();
+
+    await this.loadDatabase();
+
+    Express.init();
+    return Express.start();
   }
 }
 
-export default App;
+export default new App();

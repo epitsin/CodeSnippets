@@ -20,14 +20,14 @@ class AuthenticationController {
       const existingUser = await this.userRepository.getOne({ email: user.email });
       if (existingUser) {
         return res.status(401).json({
-          error: ['Account with the e-mail address already exists.'],
+          error: ['User email already exists.'],
         });
       }
 
       const createdUser = await this.userRepository.create(user);
       const token = AuthenticationController.createJwtToken(createdUser);
 
-      return res.json({
+      return res.status(201).json({
         token,
         expiresIn: Locals.config().jwtExpiresIn * 60,
       });
@@ -45,12 +45,6 @@ class AuthenticationController {
         return res.status(401).json({ error: ['User not found!'] });
       }
 
-      if (!existingUser.password) {
-        return res.status(401).json({
-          error: ['Please login using your social creds'],
-        });
-      }
-
       return existingUser.comparePassword(user.password, (_err: Error, isMatch: boolean) => {
         if (_err) {
           return res.status(500).send(_err);
@@ -62,7 +56,7 @@ class AuthenticationController {
 
         const token = AuthenticationController.createJwtToken(existingUser);
 
-        return res.json({
+        return res.status(200).json({
           token,
           expiresIn: Locals.config().jwtExpiresIn * 60,
         });
@@ -82,7 +76,7 @@ class AuthenticationController {
         roles: user.roles,
       },
       Locals.config().appSecret,
-      { expiresIn: Locals.config().jwtExpiresIn * 60 },
+      { expiresIn: Locals.config().jwtExpiresIn * 60 }, // in seconds
     );
   }
 }

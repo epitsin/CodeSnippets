@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint src/**",
-    "start": "nodemon --inspect src/server.ts",
-    "test": "jest"
+    "start": "node --require ts-node/register src/server.ts",
+    "debug": "nodemon --inspect src/server.ts",
+    "build": "tsc",
+    "test": "jest --detectOpenHandles"
   },
   "author": "Elena Keranova",
   "license": "ISC",
@@ -20,12 +22,14 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-flash": "0.0.2",
+    "express-validator": "^6.6.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.9",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
+    "@shelf/jest-mongodb": "^1.2.3",
     "@types/bcrypt": "^3.0.0",
     "@types/bcrypt-nodejs": "0.0.31",
     "@types/compression": "^1.7.0",
@@ -33,20 +37,25 @@
     "@types/cors": "^2.8.8",
     "@types/express": "^4.17.8",
     "@types/express-flash": "0.0.2",
-    "@types/jest": "^26.0.14",
+    "@types/jest": "^26.0.15",
     "@types/jsonwebtoken": "^8.5.0",
+    "@types/jwt-decode": "^2.2.1",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^14.11.2",
     "@types/passport-jwt": "^3.0.3",
+    "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
     "eslint": "^7.11.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.1",
-    "jest": "^26.4.2",
+    "jest": "^26.6.0",
+    "jwt-decode": "^3.0.0",
     "nodemon": "^2.0.4",
-    "ts-jest": "^26.4.0",
+    "supertest": "^5.0.0",
+    "ts-jest": "^26.4.1",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "uuid": "^8.3.1"
   }
 }

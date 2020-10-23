@@ -26,6 +26,7 @@ class Validator {
     check('email')
       .trim()
       .normalizeEmail()
+      .isEmail()
       .not()
       .isEmpty()
       .withMessage('Invalid email address!')
@@ -37,7 +38,7 @@ class Validator {
       .withMessage('Password can not be empty!')
       .bail()
       .isLength({ min: 4 })
-      .withMessage('Minimum 3 characters required!')
+      .withMessage('Minimum 4 characters required!')
       .bail(),
     (req: Request, res: Response, next: NextFunction) => {
       const errors = validationResult(req);

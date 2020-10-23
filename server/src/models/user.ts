@@ -29,18 +29,11 @@ const UserSchema: Schema = new Schema({
 
 });
 
-function encryptPassword(this: UserModel, next: HookNextFunction) {
+UserSchema.pre<UserModel>('save', function encryptPassword(this: UserModel, next: HookNextFunction) {
   const user = this;
-
-  // Encrypt the password only if necessary BUT
-  // it's commented out because isModified is undefined when using findOneAndUpdate
-  // because this is a query instead of a document
-  // -> Model.prototype.save() vs Query.prototype.findOneAndUpdate().
-  // OK for now since save is called only when creating users => the pass is always new
-  // and findOneAndUpdate is used only in the data initialization.
-  // if (!user.isModified('password')) {
-  //   return next();
-  // }
+  if (!user.isModified('password')) {
+    return next();
+  }
 
   return bcrypt.genSalt(10, (err: Error, salt: string) => {
     if (err) {
@@ -56,10 +49,7 @@ function encryptPassword(this: UserModel, next: HookNextFunction) {
       return next();
     });
   });
-}
-
-UserSchema.pre<UserModel>('save', encryptPassword);
-UserSchema.pre<UserModel>('findOneAndUpdate', encryptPassword);
+});
 
 UserSchema.methods.comparePassword = function compare(candidatePassword: string, callback: any) {
   bcrypt.compare(candidatePassword, this.password, (err: Error, isMatch: boolean) => {

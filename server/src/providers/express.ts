@@ -1,23 +1,23 @@
 import bodyParser from 'body-parser';
 import express from 'express';
+import { Server } from 'http';
 
 import CORS from '../middlewares/cors';
 import Http from '../middlewares/http';
 import Locals from './locals';
-import Router from './router';
+import Router from './routes/router';
 
 class Express {
-  /**
-   * Create the express object
-   */
   public express: express.Application;
 
-  /**
-   * Initializes the express server
-   */
   constructor() {
     this.express = express();
+  }
 
+  /**
+   * Initialize express and its middlewares
+   */
+  public init(): any {
     this.express.use(bodyParser.json());
 
     this.mountDotEnv();
@@ -25,12 +25,22 @@ class Express {
     this.mountRoutes();
   }
 
+  /**
+   * Start the express server
+   */
+  public start(): Server {
+    const { port } = Locals.config();
+
+    // Start the server on the specified port
+    return this.express.listen(port, () => console.log(`Server listening on 'http://localhost:${port}'`));
+  }
+
   private mountDotEnv(): void {
     this.express = Locals.init(this.express);
   }
 
   /**
-   * Mounts all the defined middlewares
+   * Mount all the defined middlewares
    */
   private mountMiddlewares(): void {
     // Check if CORS is enabled
@@ -44,20 +54,10 @@ class Express {
   }
 
   /**
-   * Mounts all the defined routes
+   * Mount all the defined routes
    */
   private mountRoutes(): void {
     this.express = Router.mountApi(this.express);
-  }
-
-  /**
-   * Starts the express server
-   */
-  public init(): any {
-    const { port } = Locals.config();
-
-    // Start the server on the specified port
-    this.express.listen(port, () => console.log(`Server listening on 'http://localhost:${port}'`));
   }
 }
 

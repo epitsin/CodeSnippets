@@ -5,7 +5,7 @@ import DataInitializer from '../utils/dataInitializer';
 
 export class Database {
   // Initialize your database pool
-  public static init(): any {
+  public static async init(): Promise<void> {
     const connectionString = Locals.config().mongooseUrl;
 
     // https://mongoosejs.com/docs/deprecations.html
@@ -22,14 +22,9 @@ export class Database {
       useUnifiedTopology: true,
     };
 
-    mongoose.connect(connectionString, options, (error) => {
-      if (error) {
-        console.log(error);
-        throw error;
-      }
+    await mongoose.connect(connectionString, options);
 
-      DataInitializer.populateInitialData();
-    });
+    await DataInitializer.populateInitialData();
   }
 }
 
