@@ -8,7 +8,7 @@ class ReportRouter {
   private reportController: ReportController;
 
   constructor() {
-    this.reportController = new ReportController(new TagRepository()); // TODO: inject?
+    this.reportController = new ReportController(new TagRepository());
   }
 
   public get routes(): express.Router {

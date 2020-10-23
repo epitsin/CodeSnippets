@@ -8,7 +8,7 @@ class TagsRouter {
   private tagController: TagController;
 
   constructor() {
-    this.tagController = new TagController(new TagRepository()); // TODO: inject?
+    this.tagController = new TagController(new TagRepository());
   }
 
   public get routes(): express.Router {

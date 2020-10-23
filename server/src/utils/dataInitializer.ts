@@ -40,7 +40,7 @@ class DataInitializer {
 
   private static async populateSnippets() {
     // Using find and create separately (instead of findOneAndUpdate) because of the save pre hook
-    const user1Email = 'harrypotter@hogwards.com';
+    const user1Email = 'harrypotter@hogwarts.com';
     let user1 = await UserSchema.findOne({ email: user1Email }).exec();
     if (!user1) {
       user1 = await (new UserSchema({
@@ -78,7 +78,7 @@ class DataInitializer {
     if (!admin) {
       admin = await (new UserSchema({
         email: adminEmail,
-        password: 'lord',
+        password: 'gandalf1234',
         firstName: 'Just',
         lastName: 'Gandalf',
       })).save();

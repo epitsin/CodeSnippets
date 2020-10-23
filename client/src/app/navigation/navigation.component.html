@@ -33,11 +33,13 @@
         aria-label="Button that displays a tooltip when focused or hovered over" matTooltip="Log in"
         *ngIf="!this.currentUser" routerLink="/login">
         <mat-icon>login</mat-icon>
+        <span>Log in</span>
       </button>
       <button mat-icon-button class="example-icon"
         aria-label="Button that displays a tooltip when focused or hovered over" matTooltip="Log out"
         *ngIf="this.currentUser" (click)="this.logout()">
         <mat-icon>exit_to_app</mat-icon>
+        <span>Log out</span>
       </button>
     </mat-toolbar>
     <router-outlet></router-outlet>

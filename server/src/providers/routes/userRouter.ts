@@ -8,7 +8,7 @@ class UserRouter {
   private controller: UserController;
 
   constructor() {
-    this.controller = new UserController(new UserRepository()); // TODO: inject?
+    this.controller = new UserController(new UserRepository());
   }
 
   public get routes(): express.Router {

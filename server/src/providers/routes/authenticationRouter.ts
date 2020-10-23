@@ -8,7 +8,7 @@ class AuthenticationRouter {
   private controller: AuthenticationController;
 
   constructor() {
-    this.controller = new AuthenticationController(new UserRepository()); // TODO: inject?
+    this.controller = new AuthenticationController(new UserRepository());
   }
 
   public get routes(): express.Router {
