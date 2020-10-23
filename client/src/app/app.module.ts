@@ -21,6 +21,7 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { ChartsModule } from 'ng2-charts';
 import { TagCloudModule } from 'angular-tag-cloud-module';
+import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -77,12 +78,16 @@ import { TagsCloudComponent } from './reports/tags-cloud/tags-cloud.component';
     MatRadioModule,
     ChartsModule,
     TagCloudModule,
+    HighlightModule,
   ],
   providers: [
     AuthenticationService,
     RouteGuard,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    {
+      provide: HIGHLIGHT_OPTIONS, useValue: { fullLibraryLoader: () => import('highlight.js') }
+    },
   ],
   bootstrap: [AppComponent],
 })

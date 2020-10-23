@@ -5,7 +5,7 @@
     </mat-card-header>
     <mat-card-content>
       <pre>
-        <code [innerHTML]="snippet?.code.substring(0, 50) + '...'"></code>
+        <code [highlight]="snippet?.code.substring(0, 50) + '...'"></code>
       </pre>
       <button *ngIf="this.isCurrentUserAdmin" mat-raised-button color="warn"
         (click)="this.deleteSnippet(snippet)">Delete</button>
