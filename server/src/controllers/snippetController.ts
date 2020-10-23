@@ -55,23 +55,41 @@ class SnippetController {
   }
 
   public async like(req: Request, res: Response) {
+    const snippetId = <string>req.params.id;
+    const existingSnippet = await this.snippetRepository.getById(snippetId);
+    if (!existingSnippet) {
+      return res.status(400).json({ error: `Snippet with id ${snippetId} doesn't exist!` });
+    }
+
     const updatedSnippet = await this.snippetRepository
-      .like(<string>req.params.id, req.authenticatedUser._id)
+      .like(snippetId, req.authenticatedUser._id)
       .catch((err) => res.status(500).send(err));
 
     return res.status(200).json(updatedSnippet);
   }
 
   public async dislike(req: Request, res: Response) {
+    const snippetId = <string>req.params.id;
+    const existingSnippet = await this.snippetRepository.getById(snippetId);
+    if (!existingSnippet) {
+      return res.status(400).json({ error: `Snippet with id ${snippetId} doesn't exist!` });
+    }
+
     const updatedSnippet = await this.snippetRepository
-      .dislike(<string>req.params.id, req.authenticatedUser._id)
+      .dislike(snippetId, req.authenticatedUser._id)
       .catch((err) => res.status(500).send(err));
 
     return res.status(200).json(updatedSnippet);
   }
 
   public async delete(req: Request, res: Response) {
-    await this.snippetRepository.delete(<string>req.params.id)
+    const snippetId = <string>req.params.id;
+    const existingSnippet = await this.snippetRepository.getById(snippetId);
+    if (!existingSnippet) {
+      return res.status(400).json({ error: `Snippet with id ${snippetId} doesn't exist!` });
+    }
+
+    await this.snippetRepository.delete(snippetId)
       .catch((err) => res.status(500).send(err));
 
     return res.sendStatus(204);

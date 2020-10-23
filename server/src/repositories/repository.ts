@@ -19,8 +19,16 @@ class Repository<T extends Document> {
     return this.model.findById(id).exec();
   }
 
+  public async updateMany(findQuery: {}, updateQuery: {}): Promise<any> {
+    return this.model.updateMany(findQuery, updateQuery).exec();
+  }
+
   public async delete(id: string): Promise<T | null> {
     return this.model.findByIdAndRemove(id).exec();
+  }
+
+  public async deleteMany(query: {}): Promise<any> {
+    return this.model.deleteMany(query).exec();
   }
 }
 

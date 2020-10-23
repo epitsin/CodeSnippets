@@ -37,11 +37,11 @@ class SnippetRepository extends Repository<SnippetModel> {
           name: tag,
           snippets: [snippet._id],
         };
-        return this.tagRepository.create(tagDto);
+        await this.tagRepository.create(tagDto);
+      } else {
+        result.snippets.push(snippet._id);
+        await result.save();
       }
-
-      result.snippets.push(snippet._id);
-      return result.save();
     }
 
     return snippet;
@@ -61,6 +61,12 @@ class SnippetRepository extends Repository<SnippetModel> {
       { $pullAll: { likes: [userId] } },
       { new: true },
     ).exec();
+  }
+
+  public async delete(id: string): Promise<SnippetModel | null> {
+    await this.tagRepository.updateMany({ snippets: id }, { $pullAll: { snippets: [id] } });
+
+    return super.delete(id);
   }
 }
 
