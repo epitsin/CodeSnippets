@@ -27,11 +27,31 @@ Run both applications using npm:
 $ npm start
 ```
 
-Your client application should run on port 4200, so in your browser just go to [http://localhost:4200](http://localhost:4200). The server application should run on port 3000.
+The client application should run on port 4200, so in your browser just go to [http://localhost:4200](http://localhost:4200). The server application should run on port 3000.
 
 That's it! Code snippets application should be running.
 
-## Testing Your Application
+
+## Users
+To be able to create and view snippets, register a new user or log in with one of the following
+
+```bash
+$ harrypotter@hogwards.com
+$ harry1234
+```
+
+```bash
+$ hansolo@starwars.com
+$ solo1234
+```
+To be able to delete snippets and view reports on snippet tags, register log in with the following admin account
+
+```bash
+$ gandalf@lordoftherings.com
+$ lord
+```
+
+## Testing The Application
 You can run the full test suite from the command line in the server application folder:
 
 ```bash
