@@ -23,15 +23,15 @@ export class SnippetService {
     return this.http.get<Snippet>(`${this.apiUrl}/snippets/${id}`).toPromise();
   }
 
-  public create(snippet: Snippet): Observable<Snippet> {
-    return this.http.post<Snippet>(`${this.apiUrl}/snippets`, snippet);
+  public create(snippet: Snippet): Promise<Snippet> {
+    return this.http.post<Snippet>(`${this.apiUrl}/snippets`, snippet).toPromise();
   }
 
-  public like(id: string): Observable<Snippet> {
-    return this.http.post<Snippet>(`${this.apiUrl}/snippets/${id}/likes`, {});
+  public like(id: string): Promise<Snippet> {
+    return this.http.post<Snippet>(`${this.apiUrl}/snippets/${id}/likes`, {}).toPromise();
   }
 
-  public delete(snippetId: string): Observable<any> {
-    return this.http.delete<Snippet>(`${this.apiUrl}/snippets/${snippetId}`);
+  public delete(snippetId: string): Promise<any> {
+    return this.http.delete<Snippet>(`${this.apiUrl}/snippets/${snippetId}`).toPromise();
   }
 }

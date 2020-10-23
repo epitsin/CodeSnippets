@@ -96,7 +96,7 @@ export class CreateSnippetComponent implements OnInit {
     this.tagCtrl.setValue(null);
   }
 
-  public onSubmit() {
+  public async onSubmit(): Promise<void> {
     // stop here if form is invalid
     if (this.createForm.invalid) {
       return;
@@ -112,16 +112,10 @@ export class CreateSnippetComponent implements OnInit {
       code: this.createForm.controls.code.value,
       tags: this.tags,
     };
-    this.snippetService.create(snippet)
-      .pipe(first())
-      .subscribe(
-        (data) => {
-          this.router.navigate([this.returnUrl]);
-        },
-        (error) => {
-          this.error = error;
-        },
-      );
+
+    await this.snippetService.create(snippet).catch((err) => this.error = err);
+
+    this.router.navigate([this.returnUrl]);
   }
 
   private filter(value: Tag): Tag[] {

@@ -11,11 +11,11 @@ export class ReportService {
 
   constructor(private http: HttpClient) { }
 
-  public getSnippetsReport(): Observable<Report[]> {
-    return this.http.get<Report[]>(`${this.apiUrl}/reports/tags-by-snippets`);
+  public getSnippetsReport(): Promise<Report[]> {
+    return this.http.get<Report[]>(`${this.apiUrl}/reports/tags-by-snippets`).toPromise();
   }
 
-  public getLikesReport(): Observable<Report[]> {
-    return this.http.get<Report[]>(`${this.apiUrl}/reports/tags-by-likes`);
+  public getLikesReport(): Promise<Report[]> {
+    return this.http.get<Report[]>(`${this.apiUrl}/reports/tags-by-likes`).toPromise();
   }
 }

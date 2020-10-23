@@ -24,15 +24,14 @@ export class TagReportsComponent implements OnInit {
   constructor(private reportService: ReportService) { }
 
   async ngOnInit(): Promise<void> {
-    this.reportService.getLikesReport().subscribe((data) => {
-      this.likesCloudData = data.map((d) => ({ text: `${d.name}(${d.count})`, weight: d.size + 1 }));
-      this.cloudData = this.likesCloudData;
-    });
-    this.reportService.getSnippetsReport().subscribe((data) => {
-      this.chartLabels = data.map((d) => d.name);
-      this.chartData = [{ data: data.map((d) => d.size), label: 'Likes' }];
-      this.snippetsCloudData = data.map((d) => ({ text: `${d.name}(${d.count})`, weight: d.size + 1 }));
-    });
+    const likesData = await this.reportService.getLikesReport();
+    this.likesCloudData = likesData.map((d) => ({ text: `${d.name}(${d.count})`, weight: d.size + 1 }));
+    this.cloudData = this.likesCloudData;
+
+    const snippetsData = await this.reportService.getSnippetsReport();
+    this.chartLabels = snippetsData.map((d) => d.name);
+    this.chartData = [{ data: snippetsData.map((d) => d.size), label: 'Likes' }];
+    this.snippetsCloudData = snippetsData.map((d) => ({ text: `${d.name}(${d.count})`, weight: d.size + 1 }));
   }
 
   public cloudRadioChange($event: MatRadioChange): void {

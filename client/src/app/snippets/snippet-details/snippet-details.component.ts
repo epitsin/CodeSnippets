@@ -27,29 +27,16 @@ export class SnippetDetailsComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     const { id } = this.route.snapshot.params;
-    try {
-      this.snippet = await this.snippetService.get(id);
-    } catch (error) {
-      console.log(error);
-    }
+    this.snippet = await this.snippetService.get(id);
   }
 
-  public likeSnippet(): void {
+  public async likeSnippet(): Promise<void> {
     if (this.likedByCurrentUser) {
       return;
     }
 
     this.snippet.likes.push(this.authenticationService.currentUserValue);
 
-    this.snippetService.like(this.snippet._id)
-      .pipe(first())
-      .subscribe(
-        (data) => {
-          console.log(data);
-        },
-        (error) => {
-          console.log(error);
-        },
-      );
+    await this.snippetService.like(this.snippet._id);
   }
 }

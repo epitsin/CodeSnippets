@@ -22,16 +22,8 @@ export class SnippetListComponent {
     });
   }
 
-  public deleteSnippet(snippet: Snippet): void {
-    this.snippetService.delete(snippet._id)
-      .pipe(first())
-      .subscribe(
-        (data) => {
-          this.snippets.splice(this.snippets.indexOf(snippet), 1);
-        },
-        (error) => {
-          console.log(error);
-        },
-      );
+  public async deleteSnippet(snippet: Snippet): Promise<void> {
+    await this.snippetService.delete(snippet._id);
+    this.snippets.splice(this.snippets.indexOf(snippet), 1);
   }
 }
