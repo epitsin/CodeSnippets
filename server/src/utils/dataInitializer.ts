@@ -89,7 +89,7 @@ class DataInitializer {
     }
 
     await this.createRelationship(
-      'JavaScript',
+      'javascript',
       'Validating a Date Format',
       `function ValidateDateFormat(input) {
       var dateString = input.value;
@@ -110,7 +110,7 @@ class DataInitializer {
     );
 
     await this.createRelationship(
-      'CSS',
+      'css',
       'CSS Conic Gradient Example',
       `conic-gradient() = conic-gradient(
     [ from <angle> ]? [ at <position> ]?,
@@ -138,7 +138,7 @@ class DataInitializer {
     );
 
     await this.createRelationship(
-      'Java',
+      'java',
       'How to Java configuration file with terraform',
       `//For example, to try the AWS two-tier architecture example:
 
