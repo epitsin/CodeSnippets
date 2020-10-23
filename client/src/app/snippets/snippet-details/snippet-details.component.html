@@ -16,7 +16,7 @@
     </pre>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button *ngIf="!this.likedByCurrentUser" (click)="this.likeSnippet()">
+    <button mat-button *ngIf="this.canUserLike" (click)="this.likeSnippet()">
       <mat-icon>{{this.likedByCurrentUser ? 'favorite' : 'favorite_border'}}</mat-icon> LIKE
     </button>
     <span class="example-spacer"></span>

@@ -20,9 +20,9 @@ export class SnippetDetailsComponent implements OnInit {
     private authenticationService: AuthenticationService,
   ) { }
 
-  public get likedByCurrentUser(): boolean {
-    return this.snippet.likes
-      .some((l) => l._id === this.authenticationService.currentUserValue._id);
+  public get canUserLike(): boolean {
+    return !!this.authenticationService.currentUserValue &&
+      !this.snippet.likes.some((l) => l._id === this.authenticationService.currentUserValue._id);
   }
 
   public async ngOnInit(): Promise<void> {
@@ -31,7 +31,7 @@ export class SnippetDetailsComponent implements OnInit {
   }
 
   public async likeSnippet(): Promise<void> {
-    if (this.likedByCurrentUser) {
+    if (!this.canUserLike) {
       return;
     }
 

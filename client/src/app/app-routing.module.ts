@@ -17,7 +17,7 @@ const routes: Routes = [
   // /new and /mine should be before /:id because they are more specific
   { path: 'snippets/mine', component: MySnippetsComponent, canActivate: [RouteGuard] },
   { path: 'snippets/new', component: CreateSnippetComponent, canActivate: [RouteGuard] },
-  { path: 'snippets/:id', component: SnippetDetailsComponent, canActivate: [RouteGuard] },
+  { path: 'snippets/:id', component: SnippetDetailsComponent },
 
   { path: 'reports', component: TagReportsComponent, canActivate: [RouteGuard] },
 
