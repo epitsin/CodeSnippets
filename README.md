@@ -28,6 +28,7 @@ $ npm start
 ```
 
 The client application should run on port 4200, so in your browser just go to [http://localhost:4200](http://localhost:4200). The server application should run on port 3000.
+Note: if you cannot experience problems connecting to MongoDb Atlas, check your system firewall settings and ensure that they are not blocking the access.
 
 That's it! Code snippets application should be running.
 
