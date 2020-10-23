@@ -30,8 +30,10 @@ export class NavigationComponent {
     private router: Router,
     private authenticationService: AuthenticationService,
   ) {
-    this.authenticationService.currentUser.subscribe((x) => this.currentUser = x);
-    this.isCurrentUserAdmin = this.authenticationService.isCurrentUserAdmin;
+    this.authenticationService.currentUser.subscribe((u) => {
+      this.currentUser = u;
+      this.isCurrentUserAdmin = u?.roles?.some((r) => r === 'admin')
+    });
   }
 
   public logout() {

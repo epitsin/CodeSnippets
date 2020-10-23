@@ -125,7 +125,7 @@ export class CreateSnippetComponent implements OnInit {
   }
 
   private filter(value: Tag): Tag[] {
-    const filterValue = value.name.toLowerCase();
+    const filterValue = value.name?.toLowerCase();
 
     return this.allTags.filter((tag) => tag.name.toLowerCase().indexOf(filterValue) > -1);
   }

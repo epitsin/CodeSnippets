@@ -24,10 +24,6 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
-  public get isCurrentUserAdmin(): boolean {
-    return this.currentUserValue?.roles?.some((r) => r === 'admin');
-  }
-
   public register(user: User) {
     return this.http.post<IJwtPayload>(`${this.apiUrl}/auth/register`, user)
       .pipe(map((payload) => {

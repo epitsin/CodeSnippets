@@ -16,8 +16,10 @@ export class SnippetListComponent {
 
   public isCurrentUserAdmin: boolean;
 
-  constructor(authService: AuthenticationService, private snippetService: SnippetService) {
-    this.isCurrentUserAdmin = authService.isCurrentUserAdmin;
+  constructor(authenticationService: AuthenticationService, private snippetService: SnippetService) {
+    authenticationService.currentUser.subscribe((u) => {
+      this.isCurrentUserAdmin = u?.roles?.some((r) => r === 'admin')
+    });
   }
 
   public deleteSnippet(snippet: Snippet): void {
