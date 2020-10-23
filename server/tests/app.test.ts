@@ -6,7 +6,6 @@ import jwt_decode from 'jwt-decode';
 import App from '../src/providers/app';
 import { SnippetModel } from '../src/models/snippet';
 import { UserDto } from '../src/interfaces/dtos/userDto';
-import { SnippetDto } from '../src/interfaces/dtos/snippetDto';
 
 let server: Server;
 
@@ -304,10 +303,10 @@ describe('GET /snippets/mine', () => {
     expect(snippets.length).toBe(0);
 
     // Arrange
-    const snippet: SnippetDto = {
+    const snippet = {
       name: v4(),
       code: v4(),
-      tags: [{ name: v4() }],
+      tags: [v4()],
     };
     await request(server).post('/api/snippets').send(snippet).set('Authorization', `Bearer ${token}`);
 
@@ -325,7 +324,7 @@ describe('GET /snippets/mine', () => {
 });
 
 describe('GET /snippets/:id', () => {
-  it('should require authentication', async () => {
+  it('should return data when user is not authenticated', async () => {
     // Arrange
     const allSnippetsResponse: request.Response = await request(server).get('/api/snippets');
     expect(allSnippetsResponse.status).toBe(200);
@@ -336,7 +335,11 @@ describe('GET /snippets/:id', () => {
     const res: request.Response = await request(server).get(`/api/snippets/${snippets[0]._id}`);
 
     // Assert
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(200);
+
+    const snippet = res.body as SnippetModel;
+    expect(snippet).toBeTruthy();
+    expect(snippet._id).toBe(snippets[0]._id);
   });
 
   it('should return data when user is authenticated', async () => {
