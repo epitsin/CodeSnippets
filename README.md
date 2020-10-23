@@ -4,7 +4,6 @@
 Make sure you have installed all of the following prerequisites:
 * Git - [Download & Install Git]
 * Node.js - [Download & Install Node.js](https://nodejs.org/en/download/)
-* MongoDB - [Download & Install MongoDB](http://www.mongodb.org/downloads)
 
 ## Clone The GitHub Repository
 Use git to directly clone the repository:
@@ -28,11 +27,31 @@ Run both applications using npm:
 $ npm start
 ```
 
-Your client application should run on port 4200, so in your browser just go to [http://localhost:4200](http://localhost:4200). The server application should run on port 3000.
+The client application should run on port 4200, so in your browser just go to [http://localhost:4200](http://localhost:4200). The server application should run on port 3000.
 
 That's it! Code snippets application should be running.
 
-## Testing Your Application
+
+## Users
+To be able to create and view snippets, register a new user or log in with one of the following
+
+```bash
+email: harrypotter@hogwards.com
+password: harry1234
+```
+
+```bash
+email: hansolo@starwars.com
+password: solo1234
+```
+To be able to delete snippets and view reports on snippet tags, register log in with the following admin account
+
+```bash
+email: gandalf@lordoftherings.com
+password: lord
+```
+
+## Testing The Application
 You can run the full test suite from the command line in the server application folder:
 
 ```bash
