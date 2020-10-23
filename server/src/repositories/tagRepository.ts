@@ -67,7 +67,7 @@ class TagRepository extends Repository<TagModel> {
         name: 1,
         count: {
           // Calculate the sum of all likes of all snippets
-          $size: {
+          $sum: {
             $map: {
               input: '$tag_snippets',
               // Get snippets.likes.length or 0 in case likes is missing

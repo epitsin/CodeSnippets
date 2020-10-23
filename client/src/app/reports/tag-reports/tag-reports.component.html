@@ -5,8 +5,8 @@
       Cloud
     </ng-template>
     <mat-radio-group aria-label="Select an option" (change)="this.cloudRadioChange($event)">
-      <mat-radio-button value="likes" [checked]="true">Likes</mat-radio-button>
-      <mat-radio-button value="snippets">Snippets</mat-radio-button>
+      <mat-radio-button value="likes" [checked]="true">Number of Likes per Tag</mat-radio-button>
+      <mat-radio-button value="snippets">Number of Snippets pre Tag</mat-radio-button>
     </mat-radio-group>
     <app-tags-cloud [data]="this.cloudData"></app-tags-cloud>
   </mat-tab>
