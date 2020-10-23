@@ -10,7 +10,6 @@ export interface UserModel extends Document {
   lastName: string;
   // roles: RoleModel['_id'][],
   roles: string[],
-  // eslint-disable-next-line no-unused-vars
   comparePassword(password: string, callback: any): string;
 }
 

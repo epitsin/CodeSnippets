@@ -31,6 +31,10 @@ export class SnippetService {
     return this.http.post<Snippet>(`${this.apiUrl}/snippets/${id}/likes`, {}).toPromise();
   }
 
+  public dislike(id: string): Promise<Snippet> {
+    return this.http.delete<Snippet>(`${this.apiUrl}/snippets/${id}/likes`, {}).toPromise();
+  }
+
   public delete(snippetId: string): Promise<any> {
     return this.http.delete<Snippet>(`${this.apiUrl}/snippets/${snippetId}`).toPromise();
   }

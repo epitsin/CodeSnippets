@@ -1,12 +1,11 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { TagModel } from './tag';
 import { UserModel } from './user';
 
 export interface SnippetModel extends Document {
   name: string;
   code: string;
   author?: UserModel['_id'];
-  tags: TagModel['_id'][];
+  tags: string[];
   likes: UserModel['_id'][];
 }
 
@@ -16,7 +15,7 @@ const SnippetSchema: Schema = new Schema({
   },
   code: { type: String, required: true, min: 10 },
   author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
+  tags: [{ type: String }],
   likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 

@@ -19,8 +19,9 @@ class SnippetRouter {
     router.get('/mine', Auth.authenticateJWT, this.snippetController.getMine.bind(this.snippetController));
     router.get('/:id', this.snippetController.getById.bind(this.snippetController));
 
-    router.post('/', Validator.validateSnippet, Auth.authenticateJWT, this.snippetController.post.bind(this.snippetController));
+    router.post('/', Validator.validateSnippet, Auth.authenticateJWT, this.snippetController.create.bind(this.snippetController));
     router.post('/:id/likes', Auth.authenticateJWT, this.snippetController.like.bind(this.snippetController));
+    router.delete('/:id/likes', Auth.authenticateJWT, this.snippetController.dislike.bind(this.snippetController));
 
     router.delete('/:id', Auth.authenticateJWT, this.snippetController.delete.bind(this.snippetController));
 

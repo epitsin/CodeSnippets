@@ -9,11 +9,10 @@ import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { first, map, startWith } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 
 import { Snippet } from '../../core/models/snippet';
 import { SnippetService } from '../../core/services/snippet.service';
-import { Tag } from '../../core/models/tag';
 import { TagService } from '../../core/services/tag.service';
 
 @Component({
@@ -22,15 +21,15 @@ import { TagService } from '../../core/services/tag.service';
   styleUrls: ['./create-snippet.component.scss'],
 })
 export class CreateSnippetComponent implements OnInit {
-  public separatorKeysCodes: number[] = [ENTER, COMMA];
+  public separatorKeysCodes: number[] = [ENTER, COMMA,];
 
   public tagCtrl = new FormControl();
 
-  public filteredTags: Observable<Tag[]>;
+  public filteredTags: Observable<string[]>;
 
-  public tags: Tag[] = [];
+  public tags: string[] = [];
 
-  public allTags: Tag[] = [];
+  public allTags: string[] = [];
 
   public createForm: FormGroup;
 
@@ -58,10 +57,10 @@ export class CreateSnippetComponent implements OnInit {
 
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || 'snippets/mine';
 
-    this.allTags = await this.tagService.getAll();
+    this.allTags = await (await this.tagService.getAll()).map((t) => t.name);
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(''), // Make the observable emit a value initially.
-      map((tag: Tag | null) => (tag ? this.filter(tag) : this.allTags.slice())),
+      map((tag: string | null) => (tag ? this.filter(tag) : this.allTags.slice())),
     );
   }
 
@@ -71,7 +70,7 @@ export class CreateSnippetComponent implements OnInit {
 
     // Add our tag
     if ((value || '').trim()) {
-      this.tags.push({ name: value.trim() });
+      this.tags.push(value.trim());
     }
 
     // Reset the input value
@@ -82,8 +81,8 @@ export class CreateSnippetComponent implements OnInit {
     this.tagCtrl.setValue(null);
   }
 
-  public remove(tag: Tag): void {
-    const index = this.tags.findIndex((t) => t.name === tag.name);
+  public remove(tag: string): void {
+    const index = this.tags.findIndex((t) => t === tag);
 
     if (index >= 0) {
       this.tags.splice(index, 1);
@@ -91,7 +90,7 @@ export class CreateSnippetComponent implements OnInit {
   }
 
   public selected(event: MatAutocompleteSelectedEvent): void {
-    this.tags.push({ name: event.option.viewValue });
+    this.tags.push(event.option.viewValue);
     this.tagInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
   }
@@ -113,14 +112,14 @@ export class CreateSnippetComponent implements OnInit {
       tags: this.tags,
     };
 
-    await this.snippetService.create(snippet).catch((err) => this.error = err);
-
-    this.router.navigate([this.returnUrl]);
+    await this.snippetService.create(snippet)
+      .then(() => this.router.navigate([this.returnUrl]))
+      .catch((err) => this.error = err);
   }
 
-  private filter(value: Tag): Tag[] {
-    const filterValue = value.name?.toLowerCase();
+  private filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
 
-    return this.allTags.filter((tag) => tag.name.toLowerCase().indexOf(filterValue) > -1);
+    return this.allTags.filter((tag) => tag.toLowerCase().indexOf(filterValue) > -1);
   }
 }

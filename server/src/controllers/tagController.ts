@@ -18,8 +18,14 @@ class TagController {
     return res.json(tags);
   }
 
-  public async post(req: Request, res: Response) {
+  public async create(req: Request, res: Response) {
     const tag = req.body as TagModel;
+
+    const existingTag = await this.tagRepository.getOne({ name: { $regex: new RegExp(tag.name, 'i') } });
+    if (existingTag) {
+      return res.status(400).json({ error: ['Tag with this name already exists!'] });
+    }
+
     const createdTag = await this.tagRepository
       .create(tag)
       .catch((err) => res.status(500).send(err));

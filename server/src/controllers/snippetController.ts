@@ -40,9 +40,15 @@ class SnippetController {
     return res.json(snippet);
   }
 
-  public async post(req: Request, res: Response) {
+  public async create(req: Request, res: Response) {
     const snippet = req.body as SnippetDto;
     snippet.author = req.authenticatedUser;
+
+    const existingSnippet = await this.snippetRepository.getOne({ name: { $regex: new RegExp(snippet.name, 'i') } });
+    if (existingSnippet) {
+      return res.status(400).json({ error: 'Snippet with this name already exists!' });
+    }
+
     const createdSnippet = await this.snippetRepository
       .create(snippet)
       .catch((err) => res.status(500).send(err));
@@ -53,6 +59,14 @@ class SnippetController {
   public async like(req: Request, res: Response) {
     const updatedSnippet = await this.snippetRepository
       .like(<string>req.params.id, req.authenticatedUser._id)
+      .catch((err) => res.status(500).send(err));
+
+    return res.json(updatedSnippet);
+  }
+
+  public async dislike(req: Request, res: Response) {
+    const updatedSnippet = await this.snippetRepository
+      .dislike(<string>req.params.id, req.authenticatedUser._id)
       .catch((err) => res.status(500).send(err));
 
     return res.json(updatedSnippet);

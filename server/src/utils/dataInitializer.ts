@@ -25,9 +25,8 @@ class DataInitializer {
       { new: true, upsert: true },
     ).exec();
 
-    // Use equals to compare ObjectIds.
-    if (!snippet.tags.some((t) => t.equals(tag?._id))) {
-      snippet.tags.push(tag._id);
+    if (!snippet.tags.some((t) => t === tag?.name)) {
+      snippet.tags.push(tag.name);
       await snippet.save();
     }
 

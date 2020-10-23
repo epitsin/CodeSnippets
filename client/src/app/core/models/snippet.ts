@@ -6,6 +6,6 @@ export interface Snippet {
   name?: string;
   code?: string;
   author?: User;
-  tags?: Tag[];
+  tags?: string[];
   likes?: User[]
 }

@@ -8,7 +8,6 @@ class UserRepository extends Repository<UserModel> {
   }
 
   public async create(dto: UserDto) {
-    // eslint-disable-next-line new-cap
     const document = new this.model({
       email: dto.email,
       firstName: dto.firstName,

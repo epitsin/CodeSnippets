@@ -18,23 +18,24 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-error *ngIf="this.error">{{this.error}}</mat-error>
       <mat-form-field class="example-chip-list">
         <mat-chip-list #chipList aria-label="Tag selection">
           <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="remove(tag)">
-            {{tag.name}}
+            {{tag}}
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
-          <input placeholder="New tag..." #tagInput [formControl]="tagCtrl" [matAutocomplete]="auto"
-            [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            (matChipInputTokenEnd)="add($event)">
+          <input placeholder="New tag..." #tagInput [formControl]="this.tagCtrl" [matAutocomplete]="auto"
+            [matChipInputFor]="this.chipList" [matChipInputSeparatorKeyCodes]="this.separatorKeysCodes"
+            (matChipInputTokenEnd)="this.add($event)">
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
           <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-            {{tag.name}}
+            {{tag}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+      <br />
+      <mat-error *ngIf="this.error">{{this.error}}</mat-error>
       <br />
       <button mat-raised-button color="primary">Create</button>
     </form>

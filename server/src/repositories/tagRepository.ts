@@ -12,7 +12,6 @@ class TagRepository extends Repository<TagModel> {
   }
 
   public async create(dto: TagDto) {
-    // eslint-disable-next-line new-cap
     const document = new this.model(dto);
 
     return document.save();

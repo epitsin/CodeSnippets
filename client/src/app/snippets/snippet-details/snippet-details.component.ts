@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../core/services/authentication.service';
 import { Snippet } from '../../core/models/snippet';
@@ -20,9 +19,12 @@ export class SnippetDetailsComponent implements OnInit {
     private authenticationService: AuthenticationService,
   ) { }
 
-  public get canUserLike(): boolean {
-    return !!this.authenticationService.currentUserValue &&
-      !this.snippet.likes.some((l) => l._id === this.authenticationService.currentUserValue._id);
+  public get isCurrentUserAuthenticated(): boolean {
+    return !!this.authenticationService.currentUserValue;
+  }
+
+  public get isSnippetLikedByCurrentUser(): boolean {
+    return this.snippet.likes.some((l) => l._id === this.authenticationService.currentUserValue._id);
   }
 
   public async ngOnInit(): Promise<void> {
@@ -31,12 +33,22 @@ export class SnippetDetailsComponent implements OnInit {
   }
 
   public async likeSnippet(): Promise<void> {
-    if (!this.canUserLike) {
+    if (!this.isCurrentUserAuthenticated || this.isSnippetLikedByCurrentUser) {
       return;
     }
 
     this.snippet.likes.push(this.authenticationService.currentUserValue);
 
     await this.snippetService.like(this.snippet._id);
+  }
+
+  public async dislikeSnippet(): Promise<void> {
+    if (!this.isCurrentUserAuthenticated || !this.isSnippetLikedByCurrentUser) {
+      return;
+    }
+
+    this.snippet.likes.splice(this.snippet.likes.indexOf(this.authenticationService.currentUserValue), 1);
+
+    await this.snippetService.dislike(this.snippet._id);
   }
 }
