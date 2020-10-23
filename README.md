@@ -4,7 +4,6 @@
 Make sure you have installed all of the following prerequisites:
 * Git - [Download & Install Git]
 * Node.js - [Download & Install Node.js](https://nodejs.org/en/download/)
-* MongoDB - [Download & Install MongoDB](http://www.mongodb.org/downloads)
 
 ## Clone The GitHub Repository
 Use git to directly clone the repository:
