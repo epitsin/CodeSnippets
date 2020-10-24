@@ -28,7 +28,7 @@ class SnippetRepository extends Repository<SnippetModel> {
     const snippet = await document.save();
 
     // eslint-disable-next-line no-restricted-syntax
-    for await (const tag of dto.tags) {
+    for await (const tag of uniqueTags) {
       // TODO: Use findOneAndUpdate(upsert:true)
       // Find case insensitive (just in case)
       const result = await this.tagRepository.getOne({ name: { $regex: new RegExp(tag, 'i') } });
